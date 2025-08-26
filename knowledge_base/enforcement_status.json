@@ -1,0 +1,41 @@
+{
+    "version": "1.0",
+    "last_updated": "2025-08-26",
+    "laws": {
+        "EU_ALL_DSA": {
+            "status": "active",
+            "as_of": "YYYY-MM-DD",
+            "note:": "<some random note>",
+            "source": "https://en.wikipedia.org/wiki/Digital_Services_Act",
+            "review_after_days": 15
+        },
+        "US_CA_SB976": {
+            "status": "active",
+            "as_of": "YYYY-MM-DD",
+            "note:": "<some random note>",
+            "source": "https://leginfo.legislature.ca.gov/faces/billTextClient.xhtml?bill_id=202320240SB976",
+            "review_after_days": 15
+        },
+        "US_FL_HB3": {
+            "status": "active",
+            "as_of": "YYYY-MM-DD",
+            "note:": "<some random note>",
+            "source": "https://www.flsenate.gov/Session/Bill/2024/3",
+            "review_after_days": 15
+        },
+        "US_ALL_2258A": {
+            "status": "active",
+            "as_of": "YYYY-MM-DD",
+            "note:": "<some random note>",
+            "source": "https://www.law.cornell.edu/uscode/text/18/2258A",
+            "review_after_days": 15
+        },
+        "US_UT_SB194": {
+            "status": "active",
+            "as_of": "YYYY-MM-DD",
+            "note:": "<some random note>",
+            "source": "https://en.wikipedia.org/wiki/Utah_Social_Media_Regulation_Act",
+            "review_after_days": 15
+        }
+    }
+}
