@@ -1,13 +1,13 @@
 from typing import List, Dict, Any
 import chromadb
 from chromadb.utils import embedding_functions
-from rank_bm25 import BM250kapi
+from rank_bm25 import BM25Okapi
 
 class RAGstore:
     def __init__(self, persist_dir="rag_db"):
         self.client = chromadb.PersistentClient(path=persist_dir)
         self.coll = self.client.get_or_create_collection(
-            name="kb",
+            name="knowledgebase",
             metadata={"hnsw:space":"cosine"},
             embedding_function=embedding_functions.SentenceTransformerEmbeddingFunction(
                 model_name="sentence-transformers/all-MiniLM-L6-v2"
@@ -33,7 +33,7 @@ class RAGstore:
             for i,t,m,s in zip(vres["ids"][0],
                                vres["documents"][0],
                                vres["metadatas"][0],
-                               vres["dustances"][0])
+                               vres["distances"][0])
         ]
 
         # search bm25 (if built)
