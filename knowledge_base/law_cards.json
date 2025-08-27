@@ -3,7 +3,7 @@
         "version": "1.1",
         "laws": [
             {
-                "id": "US_2258A",
+                "id": "US_ALL_2258A",
                 "name": "U.S.Code 2258A - NCMEC reporting requirements of providers",
                 "region": "US_all",
                 "category": [
@@ -12,19 +12,54 @@
                     "NCMEC"
                 ],
                 "triggers": {
-                    "keywords": ["child pornography", 
+                    "keywords": [
+                        "CyberTipline",
+                        "National Center for Missing & Exploited Children",
+                        "child pornography", 
                         "child corn", 
                         "National Centre for Missing and Exploited Children",
-                        "NCMEC"
+                        "NCMEC",
+                        "visual depiction of apparent child pornography",
+                        "complete communication",
+                        "Internet Protocol address",
+                        "IP address",
+                        "uniform resource locator",
+                        "geographic location information",
+                        "preserve contents for 1 year",
+                        "knowingly and willfully fails to make a report",
+                        "fined"
                     ],
-                    "signals": ["ncmec_reference"],
+                    "signals": [
+                        "ncmec_reference",
+                        "csam_reporting",
+                        "cybertipline_reference",
+                        "include_identifiers",
+                        "inclde_geo_info",
+                        "include_visual_depications",
+                        "include_complete_communication",
+                        "preservation_1y",
+                        "penalties_for_non_reporting",
+                        "no_proactive_monitoring_required"
+                    ],
                     "must_all": ["csam_reporting"],
-                    "must_any": ["ncmec_reference"],
-                    "negations": ["A/B test", "experiment"]
+                    "must_any": [
+                        "ncmec_reference",
+                        "cyphertipline_reference",
+                        "include_visual_depictions",
+                        "include_complete_communication"
+                    ],
+                    "negations": [
+                        "A/B test", 
+                        "experiment",
+                        "latency test",
+                        "business geofence",
+                        "regional marketing",
+                        "market rollout"
+                    ]
                 },
                 "reason_templates": [
-                    "because <this> was detected → <name of the law> applies",
-                    "because <this> was detected → <name of the law> applies"
+                    "because {signal} was detected → U.S. Code 2258A applies",
+                    "because {signal} and CyberTipline context was detected → U.S. Code 2258A applies"
                 ],
                 "priority": "high",
                 "last_updated": "2025-08-26"
@@ -35,26 +70,64 @@
         "version": "1.1",
         "laws": [
             {
-                "id": "<follow the .md id>",
-                "name": "<english name>",
-                "region": "<US/EU/state>",
+                "id": "EU_ALL_DSA",
+                "name": "EU Digital Services Act (Regulation (EU) 2022/2065)",
+                "region": "EU_ALL",
                 "category": [
-                    "<tag1>",
-                    "<tag2>"
+                    "ad_transparency",
+                    "minors_safety"
                 ],
                 "triggers": {
-                    "keywords": ["<raw words found in the text>"],
-                    "signals": ["<converting the raw words to logic keywords>"],
-                    "must_all": ["<borrow from the signals, logic gate to ensure all signals are present>"],
-                    "must_any": ["<borrow from the signals, logic gate to ensure at lesat one of the signals here are present>"],
-                    "negations": ["<completely terminate if this word/text is found>"]
+                    "keywords": [
+                        "Very Large Online Platforms (VLOPs)",
+                        "Very Large Online Search Engines (VLOSEs)",
+                        "notice and action",
+                        "trusted flaggers",
+                        "recommender systems",
+                        "ad transparency",
+                        "ban on targeted advertising to minors",
+                        "risk assessment",
+                        "mitigation measures",
+                        "transparency reporting",
+                        "data access for researchers",
+                        "crisis response mechanism",
+                        "ads repository"
+                    ],
+                    "signals": [
+                        "eu_context",
+                        "illegal_content_notice_action",
+                        "trusted_flaggers",
+                        "recommender_controls",
+                        "ad_transparency_repo",
+                        "minors_ad_ban",
+                        "risk_assessment_vlop",
+                        "mitigation_measures_vlop",
+                        "transparency_reporting",
+                        "researcher_data_access",
+                        "crisis_response_mechanism"
+                    ],
+                    "must_all": ["eu_context"],
+                    "must_any": [
+                        "minors_ad_ban",
+                        "illegal_content_notice_action",
+                        "recommender_controls",
+                        "ad_transparency_repo",
+                        "risk_assessment_vlop"
+                    ],
+                    "negations": [
+                        "A/B test",
+                        "market rollout",
+                        "latency test",
+                        "business geofence",
+                        "performance experiment"
+                    ]
                 },
                 "reason_templates": [
-                    "because <this> was detected → <name of the law> applies",
-                    "because <this> was detected → <name of the law> applies"
+                    "because {signal} was detected → EU Digital Services Act applies",
+                    "because {signal} affecting EU users was detected → EU Digital Services Act applies"
                 ],
-                "priority": "high/med/low",
-                "last_updated": "<date>"
+                "priority": "high",
+                "last_updated": "2025-08-27"
             }
         ]
     },
