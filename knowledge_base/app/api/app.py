@@ -1,8 +1,8 @@
 import os
 from fastapi import FastAPI
 from pydantic import BaseModel
-from .rag_store import RAGstore
-from .memory import MemoryStore
+from knowledge_base.app.api.rag_store import RAGstore
+from knowledge_base.app.api.memory import MemoryStore
 from dotenv import load_dotenv
 
 from openai import OpenAI
