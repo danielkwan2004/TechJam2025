@@ -22,7 +22,7 @@ DATA_DIR = BASE_DIR / "data"
 RAG_DIR  = DATA_DIR / "rag_db"                          
 MEM_PATH = DATA_DIR / "memory.jsonl"                    
 ENF_PATH = KB_DIR / "enforcement_status.json" 
-LAW_CARDS_PATH = (Path(__file__).resolve().parents[2] / "knowledge_base" / "law_cards.json")
+LAW_CARDS_PATH = (Path(__file__).resolve().parents[3] / "knowledge_base" / "law_cards.json")
 try:
     cards_raw = json.loads(LAW_CARDS_PATH.read_text(encoding="utf-8"))
     LAW_CARDS = cards_raw["laws"] if isinstance(cards_raw, dict) and "laws" in cards_raw else cards_raw
@@ -34,7 +34,7 @@ RAG_DIR.mkdir(parents=True, exist_ok=True)
 MEM_PATH.parent.mkdir(parents=True, exist_ok=True)
 
 app = FastAPI()
-rag = RAGStore(persist_dir=str(RAG_DIR))
+rag = RAGstore(persist_dir=str(RAG_DIR))
 mem = MemoryStore(path=str(MEM_PATH))
 
 # --- load enforcement status once ---

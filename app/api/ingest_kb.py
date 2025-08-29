@@ -5,12 +5,12 @@ import requests
 from pathlib import Path
 from datetime import datetime
 
-KB_DIR = (Path(__file__).parent.parent / "knowledge_base").resolve()
+KB_DIR = (Path(__file__).parent.parent.parent / "knowledge_base").resolve()
 LAWS_DIR = KB_DIR / "laws"
 LAW_CARDS_FILE = KB_DIR / "law_cards.json"
 ENFORCE_FILE = KB_DIR / "enforcement_status.json"
 INGEST_URL = "http://127.0.0.1:8000/ingest"
-BATCH_SIZE = 100
+BATCH_SIZE = 1
 
 def file_sha(path):
     with open(path, "rb") as f:
@@ -89,7 +89,7 @@ def main():
         else:
             laws_list = cards  # assume already a list of law objects
         for law in laws_list:
-            law_id = law.get("id", "unknown")
+            law_id = law["laws"][0].get("id", "unknown")
             doc_id = f"lawcards:{law_id}"
             docs.append({
                 "id": doc_id,
