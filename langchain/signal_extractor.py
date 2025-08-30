@@ -118,7 +118,7 @@ def extract_signals(doc):
         "hints": json.dumps(hints),
     })
 
-    return response.dict()
+    return response.model_dump()
 
 
 if __name__ == '__main__':

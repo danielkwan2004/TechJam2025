@@ -381,7 +381,6 @@ with st.sidebar:
 colA, colB = st.columns(2)
 with colA:
     feature_name = st.text_input("Feature Name", placeholder="e.g., Minor Accounts Privacy Defaults")
-    feature_title = st.text_input("Feature Title", placeholder="e.g., Default private accounts for minors")
 with colB:
     feature_description = st.text_area(
         "Feature Description (PRD excerpt)",
