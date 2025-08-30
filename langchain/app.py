@@ -6,120 +6,38 @@
 from __future__ import annotations
 import os
 import time
+import csv
 import typing as t
-from pinecone import Pinecone
-import streamlit as st
-from sentence_transformers import SentenceTransformer
-
-# Signal extraction imports
-import json
-
-from dotenv import load_dotenv
-from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.pydantic_v1 import BaseModel, Field
-from langchain_openai import ChatOpenAI
-# from langchain_google_genai import ChatGoogleGenerativeAI  # Optional alternative
-
-from abbreviation_helper import retrieve_all_abbreviations
-from signal_extractor import extract_signals
-from typing import Literal
-import pandas as pd
 from collections import defaultdict
-
-load_dotenv()
-
-MAX_RETRIES = 3
-RETRY_DELAY = 2  # seconds
-
-# Retriever imports
-
 from typing import List, Dict, Any, Tuple, Optional, Literal
 
-from langchain_pinecone import PineconeVectorStore
-from langchain_community.embeddings import HuggingFaceEmbeddings
+from dotenv import load_dotenv
+import streamlit as st
+import pandas as pd
 
-# Reasoner imports
+from pinecone import Pinecone
+from sentence_transformers import SentenceTransformer
+
+# LLM + prompts
 from langchain_core.prompts import ChatPromptTemplate
-from pydantic import BaseModel, Field
 from langchain_openai import ChatOpenAI
+from pydantic import BaseModel, Field
+
+# Your project helpers
+from abbreviation_helper import retrieve_all_abbreviations
+from signal_extractor import extract_signals
+
+load_dotenv()
 
 st.set_page_config(page_title="Feature → Clause Reasoner", layout="wide")
 
+MAX_RETRIES = 3
+RETRY_DELAY = 2  # seconds
+HISTORY_PATH = "run_history.csv"  # local CSV to save each run
 
 # =========================
-# Skeleton Pipeline Functions
+# Pinecone Helpers (Direct)
 # =========================
-
-# =========================
-# Retriever pipeline
-# =========================
-
-def _search_with_relevance_scores(vs: PineconeVectorStore, query: str, k: int, where: dict | None = None):
-    pairs = vs.similarity_search_with_score(query, k=k, filter=where)
-    out = []
-    for doc, dist in pairs:
-        try:
-            d = float(dist)
-        except Exception:
-            d = 1.0
-        rel = 1.0 / (1.0 + d)
-        out.append((doc, rel))
-    return out
-
-def _uid(doc, namespace: str) -> str:
-    m = doc.metadata or {}
-    return f"{namespace}::{m.get('article_number','')}__{m.get('clause_id','')}"
-
-def _fuse_rrf_with_overlap(
-    *,
-    sem_pairs,
-    signal_lists,
-    query_signals: List[str],
-    rrf_k: int,
-    lambda_signal: float,
-    overlap_bonus: float,
-    namespace: str,
-):
-    BIG = 10_000_000
-    candidates = {}
-    sem_rank, sem_rel = {}, {}
-    for i, (doc, rel) in enumerate(sem_pairs):
-        uid = _uid(doc, namespace)
-        candidates[uid] = doc
-        sem_rank[uid] = i
-        sem_rel[uid] = float(rel)
-
-    sig_rank = defaultdict(lambda: BIG)
-    overlap_counts = defaultdict(int)
-
-    for sig_idx, pairs in enumerate(signal_lists):
-        sig_val = query_signals[sig_idx] if sig_idx < len(query_signals) else None
-        for i, (doc, _rel) in enumerate(pairs):
-            uid = _uid(doc, namespace)
-            candidates[uid] = doc
-            if i < sig_rank[uid]:
-                sig_rank[uid] = i
-            doc_sigs = (doc.metadata or {}).get("signals", []) or []
-            if sig_val and isinstance(doc_sigs, list) and sig_val in doc_sigs:
-                overlap_counts[uid] += 1
-
-    for uid in list(candidates.keys()):
-        sem_rank.setdefault(uid, BIG)
-        sem_rel.setdefault(uid, 0.0)
-        sig_rank.setdefault(uid, BIG)
-        overlap_counts.setdefault(uid, 0)
-
-    fused = []
-    for uid in candidates.keys():
-        rr_sem = 1.0 / (rrf_k + sem_rank[uid])
-        rr_sig = 1.0 / (rrf_k + sig_rank[uid])
-        frac = (overlap_counts[uid] / max(len(query_signals), 1)) if query_signals else 0.0
-        final = rr_sem + (lambda_signal * rr_sig) + (overlap_bonus * frac)
-        fused.append((uid, final, candidates[uid], sem_rel[uid], overlap_counts[uid], namespace))
-
-    fused.sort(key=lambda x: x[1], reverse=True)
-    return fused
-
 def _list_all_namespaces(index_name: str) -> List[str]:
     """List namespaces that exist on the index (keys in describe_index_stats().namespaces)."""
     pc = Pinecone(api_key=os.environ["PINECONE_API_KEY"])
@@ -127,52 +45,8 @@ def _list_all_namespaces(index_name: str) -> List[str]:
     stats = index.describe_index_stats() or {}
     ns_map = stats.get("namespaces") or {}
     namespaces = list(ns_map.keys())
-    # If you might have used the default namespace, include "" for probing:
     if "" not in namespaces:
-        namespaces.append("")
-    return namespaces
-
-
-def _query_ns(
-    index,
-    *,
-    vector: List[float],
-    namespace: Optional[str],
-    top_k: int,
-    flt: Optional[dict] = None,
-) -> List[dict]:
-    """Query Pinecone (single namespace) and return list of matches with metadata."""
-    res = index.query(
-        vector=vector,
-        top_k=top_k,
-        namespace=(namespace or None),  # None = default namespace
-        filter=flt,
-        include_metadata=True,
-    )
-    return res.get("matches", []) or []
-
-
-import os
-from typing import Any, Dict, List, Optional, Tuple
-from collections import defaultdict
-
-from dotenv import load_dotenv
-from pinecone import Pinecone
-from sentence_transformers import SentenceTransformer
-
-load_dotenv()
-
-
-def _list_all_namespaces(index_name: str) -> List[str]:
-    """List namespaces that exist on the index (keys in describe_index_stats().namespaces)."""
-    pc = Pinecone(api_key=os.environ["PINECONE_API_KEY"])
-    index = pc.Index(index_name)
-    stats = index.describe_index_stats() or {}
-    ns_map = stats.get("namespaces") or {}
-    namespaces = list(ns_map.keys())
-    # include default namespace probe
-    if "" not in namespaces:
-        namespaces.append("")
+        namespaces.append("")  # probe default ns too
     return namespaces
 
 
@@ -355,26 +229,21 @@ def retrieve_top_k_all_namespaces_with_signals_direct(
 # =========================
 class GeoReasoning(BaseModel):
     """Structured output for geo compliance reasoning with explicit uncertainty."""
-    # Allowed values:
-    # - "yes"  -> geo-specific logic is needed
-    # - "no"   -> geo-specific logic is not needed
-    # - "needs_human_review" -> the model is unsure and requests human review
     needs_geo_logic: Literal["yes", "no", "needs_human_review"] = Field(
         ...,
         description="One of 'yes', 'no', or 'needs_human_review'."
     )
     reasoning: str = Field(
         ...,
-        description="Clear, concise explanation referencing the feature and relevant clauses. If 'needs_human_review', state exactly why you're unsure or what is missing."
+        description="Clear, concise explanation. If 'needs_human_review', say why (missing/ambiguous/conflicting)."
     )
     regulations: List[str] = Field(
         default_factory=list,
-        description="List of related regulation/act/section names inferred from the clause metadata. If unclear, return an empty list."
+        description="Related regulation/act/section names inferred from clause metadata."
     )
 
 
 def _format_matches(matches: List[Dict[str, Any]]) -> str:
-    """Render retriever results into a compact block for the LLM."""
     if not matches:
         return "(no clauses provided)"
     lines = []
@@ -384,7 +253,7 @@ def _format_matches(matches: List[Dict[str, Any]]) -> str:
         ttl = m.get("article_title", "")
         typ = m.get("type", "")
         sigs = ", ".join(m.get("signals", []) or [])
-        txt = (m.get("text") or "").strip()[:800]  # keep prompt lean
+        txt = (m.get("text") or "").strip()[:800]
         lines.append(
             f"[clause_id: {cid}] (article: {art} — {ttl} — type: {typ} — signals: {sigs})\n{txt}"
         )
@@ -392,35 +261,22 @@ def _format_matches(matches: List[Dict[str, Any]]) -> str:
 
 
 def reason_feature_geo_compliance(
-        *,
-        feature: Dict[str, str],
-        matches: List[Dict[str, Any]],
-        llm: Optional[Any] = None,
-        model: str = "gpt-4o-mini",
-        temperature: float = 0.0,
+    *,
+    feature: Dict[str, str],
+    matches: List[Dict[str, Any]],
+    llm: Optional[Any] = None,
+    model: str = "gpt-4o-mini",
+    temperature: float = 0.0,
 ) -> Dict[str, Any]:
-    """
-    Decide whether the feature needs geo-specific compliance logic,
-    or if the model is unsure and requires human review.
-
-    Returns dict: {
-      "needs_geo_logic": "yes" | "no" | "needs_human_review",
-      "reasoning": str,
-      "regulations": [str, ...]
-    }
-    """
-    # Short-circuit when there is no evidence to reason about.
     if not matches:
         return {
             "needs_geo_logic": "needs_human_review",
-            "reasoning": "No clauses were provided by the retriever; unable to determine jurisdictional variability. A human should review.",
+            "reasoning": "No clauses were provided by the retriever; unable to determine jurisdictional variability.",
             "regulations": []
         }
 
-    # Default LLM (swap to Gemini if preferred)
     if llm is None:
         llm = ChatOpenAI(model=model, temperature=temperature)
-        # llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=temperature)
 
     structured_llm = llm.with_structured_output(GeoReasoning)
 
@@ -432,10 +288,9 @@ def reason_feature_geo_compliance(
                 "decide if the feature needs geo-specific compliance logic. Choose exactly one:\n"
                 " - 'yes'  : obligations/bans/processes vary by jurisdiction or cited clauses clearly apply only to certain geographies.\n"
                 " - 'no'   : obligations are jurisdiction-agnostic or do not vary across regions in the provided clauses.\n"
-                " - 'needs_human_review' : you are unsure because the clauses are insufficient, conflicting, out-of-scope, "
-                "or do not provide clear jurisdictional signals. WHEN UNSURE, YOU MUST SELECT 'needs_human_review' and explicitly state why."
-                "ONLY use the provided clauses as context, and do not assume anything other than what clauses you have been provided with."
-                "If the clauses are not very related to the feature, you must select 'needs_human_review' and explain why."
+                " - 'needs_human_review' : you are unsure due to insufficient, conflicting, or out-of-scope clauses.\n"
+                "ONLY use the provided clauses as context; do not assume anything not shown. "
+                "If the clauses are not clearly related to the feature, select 'needs_human_review' and explain why."
             ),
             (
                 "human",
@@ -447,9 +302,8 @@ def reason_feature_geo_compliance(
                 "Instructions:\n"
                 "- Return a structured decision using the schema.\n"
                 "- Keep the reasoning concise and reference clause_ids or titles when helpful.\n"
-                "- 'regulations' should list concise regulation/act/section names inferred from clause metadata; "
-                "leave empty if unclear.\n"
-                "- If you select 'needs_human_review', clearly declare the uncertainty (e.g., missing geography, ambiguous scope, conflicting clauses)."
+                "- 'regulations' should list concise regulation/act/section names inferred from clause metadata; leave empty if unclear.\n"
+                "- If you select 'needs_human_review', clearly declare the uncertainty."
             ),
         ]
     )
@@ -471,7 +325,6 @@ def reason_feature_geo_compliance(
 # =========================
 # Helpers
 # =========================
-
 def dedupe_preserve_order(items: t.List[str]) -> t.List[str]:
     seen = set()
     out = []
@@ -483,13 +336,6 @@ def dedupe_preserve_order(items: t.List[str]) -> t.List[str]:
 
 
 def signals_from_llm_output(llm_output: dict, min_confidence: float = 0.5) -> t.List[str]:
-    """
-    Extract de-duped, high-confidence signals from your LLM output dict:
-    {
-      "error": null,
-      "data": [{"law":"...","signal":"...","reason":"...","confidence":0.8}, ...]
-    }
-    """
     if not isinstance(llm_output, dict) or llm_output.get("error"):
         return []
     rows = llm_output.get("data") or []
@@ -504,18 +350,39 @@ def signals_from_llm_output(llm_output: dict, min_confidence: float = 0.5) -> t.
     return dedupe_preserve_order(sigs)
 
 
-def build_feature_text(name: str, description: str, signals: t.List[str], llm_output: dict) -> str:
-    """Compose a single semantic query string for the retriever."""
-    reasons = []
-    for r in (llm_output.get("data") or [])[:5]:
-        txt = (r.get("reason") or "").strip()
-        if txt:
-            reasons.append(txt[:220])
-    reason_block = ""
-    if reasons:
-        reason_block = "\nReason hints:\n- " + "\n- ".join(reasons[:5])
-    sig_line = f"Signals: {', '.join(signals)}" if signals else "Signals: (none)"
-    return f"{name}\n\n{description.strip()}\n\n{sig_line}{reason_block}"
+def build_feature_text_from_signals(query_signals: list[str]) -> str:
+    if not query_signals:
+        return "Laws related to general compliance."
+    cleaned = [s.replace("_", " ").strip() for s in query_signals if s]
+    if not cleaned:
+        return "Laws related to general compliance."
+    return f"Laws related to {', '.join(cleaned)}."
+
+
+def save_run_row_csv(path: str, row: Dict[str, Any]) -> None:
+    """Append run to CSV (create with header if doesn't exist)."""
+    os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
+    file_exists = os.path.exists(path)
+    # Ensure no newlines that would break CSV layout
+    safe_row = {k: (str(v).replace("\n", " ").replace("\r", " ").strip() if isinstance(v, str) else v)
+                for k, v in row.items()}
+    with open(path, "a", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=list(safe_row.keys()))
+        if not file_exists:
+            writer.writeheader()
+        writer.writerow(safe_row)
+
+
+def load_history_df(path: str) -> pd.DataFrame:
+    if not os.path.exists(path):
+        return pd.DataFrame(columns=[
+            "timestamp", "feature_name", "signals", "decision", "reasoning",
+            "regulations", "namespaces", "clauses_count", "top_clause_ids"
+        ])
+    try:
+        return pd.read_csv(path)
+    except Exception:
+        return pd.DataFrame()
 
 
 # -------------------------
@@ -532,7 +399,6 @@ with st.sidebar:
     st.divider()
     st.subheader("Pinecone Settings")
     index_name = st.text_input("Pinecone index_name", value="legal-clauses")
-    namespace = st.text_input("Pinecone namespace (optional)", value="EU_DSA")
     st.caption("Make sure your index stores clause text under metadata key 'clause_text'.")
     st.markdown("---")
 
@@ -569,7 +435,7 @@ if run:
 
     prd_text = feature_description or ""
 
-    # 1) Extract signals (LLM)
+    # 1) Extract signals (LLM) with retries
     llm_output = None
     for attempt in range(1, MAX_RETRIES + 1):
         with st.spinner(f"Extracting signals from PRD… (Attempt {attempt})"):
@@ -586,8 +452,8 @@ if run:
                 st.error(f"Extractor failed after {MAX_RETRIES} attempts: {error_val}")
                 st.stop()
         else:
-            # Success, break out of loop
             break
+
     st.subheader("🔎 LLM Signal Extraction")
     st.json(llm_output, expanded=False)
 
@@ -600,15 +466,7 @@ if run:
     query_signals = signals_from_llm_output(llm_output, min_confidence=min_confidence)
     st.markdown("**Signals used for retrieval**")
     st.write(query_signals if query_signals else "(none)")
-    
-    def build_feature_text_from_signals(query_signals: list[str]) -> str:
-        if not query_signals:
-            return "Laws related to general compliance."
-        cleaned = [s.replace("_", " ").strip() for s in query_signals if s]
-        if not cleaned:
-            return "Laws related to general compliance."
-        return f"Laws related to {', '.join(cleaned)}."
-        
+
     feature_text = build_feature_text_from_signals(query_signals)
 
     # 3) Retrieve top clauses (Pinecone cloud)
@@ -636,12 +494,14 @@ if run:
             header = f"{r.get('clause_id')} — Art. {r.get('article_number', '')} — {r.get('article_title', '')}"
             with st.expander(header):
                 st.write(r.get("text", ""))
-                meta_cols = st.columns(3)
+                meta_cols = st.columns(4)
                 with meta_cols[0]:
-                    st.caption(f"Signals: {', '.join(r.get('signals', [])) or '(none)'}")
+                    st.caption(f"Namespace: {r.get('namespace','') or '(default)'}")
                 with meta_cols[1]:
-                    st.caption(f"Semantic relevance: {r.get('semantic_relevance', 0):.3f}")
+                    st.caption(f"Signals: {', '.join(r.get('signals', [])) or '(none)'}")
                 with meta_cols[2]:
+                    st.caption(f"Semantic similarity: {r.get('semantic_relevance', 0):.3f}")
+                with meta_cols[3]:
                     st.caption(f"Final score: {r.get('final_score', 0):.4f}")
     else:
         st.caption("No clauses were retrieved.")
@@ -676,6 +536,29 @@ if run:
     else:
         st.caption("(none found)")
 
+    # 5) Save run locally and render history
+    namespaces_used = sorted({r.get("namespace", "") or "(default)" for r in (results or [])})
+    top_clause_ids = [f"{r.get('namespace','')}::{r.get('clause_id')}" for r in (results or [])[:5]]
+    row = {
+        "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
+        "feature_name": feature_name,
+        "signals": ", ".join(query_signals) if query_signals else "",
+        "decision": decision,
+        "reasoning": reasoned.get("reasoning", ""),
+        "regulations": ", ".join(regs) if regs else "",
+        "namespaces": ", ".join(namespaces_used),
+        "clauses_count": len(results or []),
+        "top_clause_ids": ", ".join(top_clause_ids),
+    }
+    try:
+        save_run_row_csv(HISTORY_PATH, row)
+    except Exception as e:
+        st.error(f"Failed to save run history: {e}")
+
     st.markdown("---")
-    with st.expander("Debug: Feature Text Sent to Retriever"):
-        st.code(feature_text)
+    st.subheader("🗂️ Run History (local)")
+    df_hist = load_history_df(HISTORY_PATH)
+    if not df_hist.empty:
+        st.dataframe(df_hist, hide_index=True, use_container_width=True)
+    else:
+        st.caption("No runs saved yet.")
