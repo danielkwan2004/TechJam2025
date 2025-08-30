@@ -8,7 +8,7 @@ from langchain_openai import ChatOpenAI
 from typing import List, Optional
 from abbreviation_helper import retrieve_abbreviations
 
-from langchain_core.pydantic_v1 import BaseModel, Field
+from pydantic import BaseModel, Field
 
 load_dotenv()
 
@@ -96,7 +96,7 @@ def extract_signals(doc):
             "Output schema (STRICT):\n"
             "Return an object with:\n"
             "- error: null OR a short string\n"
-            "- data: array of objects, each with fields { law, signal, reason, confidence }."
+            "- data: array of objects, each with fields {{ law, signal, reason, confidence }}."
         ),
         (
             "human",
@@ -105,12 +105,6 @@ def extract_signals(doc):
     ])
 
     chain = prompt | llm
-
-    formatted_messages = prompt.format_messages(
-        abbreviations=formatted_abbrevs,
-        hints=hints,
-        document=doc,
-    )
 
     '''
     print("==== Rendered Prompt ====")

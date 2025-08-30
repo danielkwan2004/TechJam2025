@@ -20,7 +20,10 @@ from langchain_core.pydantic_v1 import BaseModel, Field
 from langchain_openai import ChatOpenAI
 # from langchain_google_genai import ChatGoogleGenerativeAI  # Optional alternative
 
-from abbreviation_helper import retrieve_abbreviations
+from abbreviation_helper import retrieve_all_abbreviations
+from signal_extractor import extract_signals
+from typing import Literal
+import pandas as pd
 
 load_dotenv()
 
@@ -35,7 +38,7 @@ from langchain_community.embeddings import HuggingFaceEmbeddings
 
 # Reasoner imports
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.pydantic_v1 import BaseModel, Field
+from pydantic import BaseModel, Field
 from langchain_openai import ChatOpenAI
 
 st.set_page_config(page_title="Feature → Clause Reasoner", layout="wide")
@@ -353,6 +356,11 @@ st.title("🧭 Geo-Specific Compliance Pipeline (Pinecone Cloud)")
 st.caption("PRD → Signals (LLM) → Retrieval (Pinecone + local HF embeddings) → Geo Reasoner (LLM)")
 
 with st.sidebar:
+    with st.expander("Show/hide abbreviations"):
+        abbreviations = retrieve_all_abbreviations()
+        st.dataframe(pd.DataFrame(abbreviations).reset_index(drop=True).iloc[:, 1:], hide_index=True)
+
+    st.divider()
     st.subheader("Pinecone Settings")
     index_name = st.text_input("Pinecone index_name", value="legal-clauses")
     namespace = st.text_input("Pinecone namespace (optional)", value="eu_dsa")
@@ -420,7 +428,7 @@ if run:
     # 3) Retrieve top clauses (Pinecone cloud)
     with st.spinner("Retrieving relevant clauses (Pinecone)…"):
         try:
-            results = retrieve_top10_clauses_pinecone(
+            results = retrieve_top10_clauses(
                 feature_text=feature_text,
                 query_signals=query_signals,
                 index_name=index_name,
