@@ -7,6 +7,14 @@ from typing import List
 
 import streamlit as st
 
+import pandas as pd
+
+from dotenv import load_dotenv
+
+from abbreviation_helper import retrieve_all_abbreviations
+
+load_dotenv()
+
 # LangChain core
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from langchain_community.vectorstores import FAISS
@@ -35,6 +43,11 @@ st.title("🧭 LLM RAG Demo with LangChain + LangSmith")
 # SIDEBAR: DOC UPLOAD & SETTINGS
 # -----------------------
 with st.sidebar:
+    with st.expander("Show/hide abbreviations"):
+        abbreviations = retrieve_all_abbreviations()
+        st.dataframe(pd.DataFrame(abbreviations).reset_index(drop=True).iloc[:, 1:], hide_index=True)
+
+    st.divider()
     st.header("📄 Upload Documents")
     uploaded_files = st.file_uploader(
         "Upload PDFs or .txt files",
@@ -60,6 +73,7 @@ with st.sidebar:
         "`LANGCHAIN_TRACING_V2=true`, `LANGCHAIN_API_KEY`, and `LANGCHAIN_PROJECT`."
     )
 
+
 # -----------------------
 # HELPER: LOAD & CHUNK DOCS
 # -----------------------
@@ -80,6 +94,7 @@ def read_docs_to_texts(files) -> List[str]:
             texts.append(content)
     return texts
 
+
 def make_vectorstore(texts: List[str], chunk_size: int, chunk_overlap: int) -> FAISS:
     splitter = RecursiveCharacterTextSplitter(
         chunk_size=chunk_size,
@@ -93,6 +108,7 @@ def make_vectorstore(texts: List[str], chunk_size: int, chunk_overlap: int) -> F
     embeddings = OpenAIEmbeddings(model="text-embedding-3-large")
     vs = FAISS.from_texts(chunks, embeddings)
     return vs
+
 
 # -----------------------
 # RAG CHAIN (retrieval + reasoning)
@@ -113,11 +129,13 @@ def build_chain(model_name: str, temperature: float):
     chain = rag_prompt | llm
     return chain
 
+
 def run_rag_chain(chain, vectorstore: FAISS, question: str, top_k: int):
     docs = vectorstore.similarity_search(question, k=top_k)
     context = "\n\n---\n\n".join(d.page_content for d in docs)
     resp = chain.invoke({"question": question, "context": context})
     return resp.content, docs
+
 
 # -----------------------
 # MAIN LAYOUT: QUESTION + RESULTS
@@ -205,7 +223,8 @@ with col_a:
                         "ID": str(r.id),
                         "Status": r.state.value if hasattr(r, "state") else getattr(r, "status", None),
                         "Start": r.start_time.strftime("%Y-%m-%d %H:%M:%S") if r.start_time else "",
-                        "Latency (ms)": int((r.end_time - r.start_time).total_seconds() * 1000) if (r.start_time and r.end_time) else "",
+                        "Latency (ms)": int((r.end_time - r.start_time).total_seconds() * 1000) if (
+                                r.start_time and r.end_time) else "",
                         "Tags": ", ".join(r.tags or []),
                     })
                 if rows:
