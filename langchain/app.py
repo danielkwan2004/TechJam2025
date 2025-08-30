@@ -4,8 +4,8 @@
 # Run: streamlit run app.py
 # -----------------------------------------------------------------
 from __future__ import annotations
-import json
 import os
+import time
 import typing as t
 from pinecone import Pinecone
 import streamlit as st
@@ -27,6 +27,9 @@ import pandas as pd
 from collections import defaultdict
 
 load_dotenv()
+
+MAX_RETRIES = 3
+RETRY_DELAY = 2  # seconds
 
 # Retriever imports
 
@@ -567,9 +570,24 @@ if run:
     prd_text = feature_description or ""
 
     # 1) Extract signals (LLM)
-    with st.spinner("Extracting signals from PRD…"):
-        llm_output = extract_signals(prd_text)
+    llm_output = None
+    for attempt in range(1, MAX_RETRIES + 1):
+        with st.spinner(f"Extracting signals from PRD… (Attempt {attempt})"):
+            llm_output = extract_signals(prd_text)
 
+        error_val = llm_output.get("error")
+        if error_val not in (None, "null"):
+            st.warning(f"Extractor reported an error: {error_val}")
+            if attempt < MAX_RETRIES:
+                st.info(f"Retrying in {RETRY_DELAY} seconds…")
+                time.sleep(RETRY_DELAY)
+                continue
+            else:
+                st.error(f"Extractor failed after {MAX_RETRIES} attempts: {error_val}")
+                st.stop()
+        else:
+            # Success, break out of loop
+            break
     st.subheader("🔎 LLM Signal Extraction")
     st.json(llm_output, expanded=False)
 
