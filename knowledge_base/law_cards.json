@@ -254,8 +254,8 @@
     "version": "1.1",
     "laws": [
       {
-        "id": "UT_SB152_HB311",
-        "name": "Utah Social Media Regulation Act",
+        "id": "UT_SB152",
+        "name": "Utah Social Media Regulation Amendments",
         "region": "US-UT",
         "category": [
           "Youth Protection",
@@ -264,39 +264,39 @@
         ],
         "triggers": {
           "keywords": [
-            "age verification",
-            "parental consent",
-            "data collection restrictions",
-            "algorithmic recommendations",
-            "restricted access hours",
-            "addictive features",
-            "quarterly audits",
-            "private right of action",
-            "civil penalties"
+            "verify the age of users",
+            "parental consent for minors under 18",
+            "parental access to posts and messages",
+            "hide minor accounts from search results",
+            "block direct messages unless friended",
+            "prohibit targeted ads",
+            "restrict data collection to legal necessities",
+            "curfew: 10:30 p.m. to 6:30 a.m. access restrictions",
+            "parental control of daily usage"
           ],
           "signals": [
             "age_verification_required",
             "parental_consent_required",
-            "data_collection_restrictions",
-            "algorithmic_recommendations_ban",
-            "restricted_access_hours",
-            "addictive_features_prohibited",
-            "quarterly_audits_required",
-            "private_right_of_action",
-            "civil_penalties_imposed"
+            "parental_view_access",
+            "hide_minor_search",
+            "block_unfriended_dm",
+            "no_targeted_ads",
+            "minimized_data_collection",
+            "access_curfew_10_30_to_6_30",
+            "parental_usage_limits"
           ],
           "must_all": [
             "age_verification_required",
             "parental_consent_required"
           ],
           "must_any": [
-            "data_collection_restrictions",
-            "algorithmic_recommendations_ban",
-            "restricted_access_hours",
-            "addictive_features_prohibited",
-            "quarterly_audits_required",
-            "private_right_of_action",
-            "civil_penalties_imposed"
+            "parental_view_access",
+            "hide_minor_search",
+            "block_unfriended_dm",
+            "no_targeted_ads",
+            "minimized_data_collection",
+            "access_curfew_10_30_to_6_30",
+            "parental_usage_limits"
           ],
           "negations": [
             "A/B test",
@@ -308,11 +308,63 @@
           ]
         },
         "reason_templates": [
-          "because {signal} was detected → Utah Social Media Regulation Act applies",
-          "because {signal} affecting users in Utah was detected → Utah Social Media Regulation Act applies"
+          "because {signal} was detected → Utah SB 152 applies",
+          "because {signal} affecting users in Utah was detected → Utah SB 152 applies"
         ],
         "priority": "high",
-        "last_updated": "2024-10-11"
+        "last_updated": "2023-03-23"
+      },
+      {
+        "id": "UT_HB311",
+        "name": "Utah Social Media Usage Amendments",
+        "region": "US-UT",
+        "category": [
+          "Youth Protection",
+          "Harm Prevention",
+          "Enforcement"
+        ],
+        "triggers": {
+          "keywords": [
+            "prohibit features that cause addiction in minors",
+            "quarterly audits",
+            "private right of action",
+            "statutory damages for harm",
+            "rebuttable presumption of harm for under-16",
+            "civil penalties per violation"
+          ],
+          "signals": [
+            "ban_addictive_features",
+            "quarterly_audits_required",
+            "private_right_of_action",
+            "statutory_damages",
+            "presumption_of_harm_under_16",
+            "per_violation_penalties"
+          ],
+          "must_all": [
+            "ban_addictive_features",
+            "private_right_of_action"
+          ],
+          "must_any": [
+            "quarterly_audits_required",
+            "statutory_damages",
+            "presumption_of_harm_under_16",
+            "per_violation_penalties"
+          ],
+          "negations": [
+            "A/B test",
+            "experiment",
+            "latency test",
+            "business geofence",
+            "regional marketing",
+            "market rollout"
+          ]
+        },
+        "reason_templates": [
+          "because {signal} was detected → Utah HB 311 applies",
+          "because {signal} affecting users in Utah was detected → Utah HB 311 applies"
+        ],
+        "priority": "high",
+        "last_updated": "2023-03-23"
       }
     ]
   },
