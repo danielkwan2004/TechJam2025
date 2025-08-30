@@ -75,7 +75,8 @@ def extract_signals(doc):
         ),
         (
             "system",
-            "Here is the list of abbreviations as a JSON with keys 'term' and 'explanation':\n{abbreviations}\n"
+            "Here is the list of abbreviations as a JSON array. Each item has keys 'term' and 'explanation'."
+            "Parse the JSON carefully. Match abbreviations in the PRD exactly (case-insensitive, whole words). :\n{abbreviations}\n"
         ),
         (
             "system",
