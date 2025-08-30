@@ -27,15 +27,17 @@ def extract_signals(doc):
 
     hints = extract_hints()
 
-    llm = ChatOpenAI(model="gpt-4o", temperature=0.2)
+    llm = ChatOpenAI(model="gpt-4o", temperature=0.4)
     prompt = ChatPromptTemplate.from_messages([
         (
             "system",
-            "You are a precise compliance signal extraction assistant."
-            "Your job is to analyse a Product Requirement Document (PRD) and output potential compliance issues"
-            "Use the law hints provided to detect signals."
+            "You are a precise compliance signal extraction assistant. "
+            "Your job is to analyse a Product Requirement Document (PRD) and output potential compliance issues. "
+            "Look for both explicit keywords and functional hints that imply compliance signals. "
+            "Take geographical location into consideration when looking for signals. "
             "When you see an abbreviation in the PRD, look it up exactly in the abbreviations list provided below. "
-            "If an abbreviation cannot be found, return an error stating what is missing and no signals."
+            "If an abbreviation cannot be found, return an error, stating what is missing and no signals. "
+            "If there are unclear terminologies, return an error, stating what is unclear. "
             "If no signals are found, return error as null.\n"
         ),
         (
@@ -84,7 +86,7 @@ def extract_signals(doc):
     return response.content.lstrip('```json\n').rstrip('\n```')
 
 if __name__ == '__main__':
-    userInput = "Introduce a creator leaderboard updated weekly using internal analytics. Points and rankings are stored in FR metadata and tracked using IMT."
+    userInput = "We are implementing a curfew-based login restriction for users under 18. The system uses ASL to detect minor accounts and routes enforcement through GH. The feature activates during restricted night hours and logs activity using EchoTrace for auditability. This allows parental control to be enacted without user-facing alerts, operating in ShadowMode during initial rollout."
     output = extract_signals(userInput)
     print("==== Output ====")
     print(output)
