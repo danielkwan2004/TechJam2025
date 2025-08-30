@@ -45,108 +45,12 @@ st.set_page_config(page_title="Feature → Clause Reasoner", layout="wide")
 # Skeleton Pipeline Functions
 # =========================
 
-
-# =========================
-# Signal Extraction Pipeline
-# =========================
-
-# --------- Structured Output Schemas (Pydantic) ---------
-
-class Detection(BaseModel):
-    law: str = Field(..., description="Precise law id from hints (e.g., 'EU Digital Services Act').")
-    signal: str = Field(..., description="Signal name as detected.")
-    reason: str = Field(..., description="Short explanation quoting PRD text and why it maps to the law/signal.")
-    confidence: float = Field(..., ge=0.0, le=1.0, description="Confidence in detection, 0.0–1.0.")
-
-
-class LLMOutput(BaseModel):
-    error: Optional[str] = Field(None, description="Null if no error; otherwise a short error message.")
-    data: List[Detection] = Field(default_factory=list, description="Detected compliance signals.")
-
-
-def extract_hints():
-    out = []
-    laws = json.load(open('../knowledge_base/law_cards.json'))
-    for law in laws:
-        cleaned_law = {
-            'id': law['laws'][0]['id'],
-            'triggers': law['laws'][0]['triggers'],
-            'reason_templates': law['laws'][0]['reason_templates']
-        }
-        out.append(cleaned_law)
-    return out
-
-
-def extract_signals(doc: str) -> dict:
-    abbreviations = retrieve_abbreviations(doc)
-    formatted_abbrevs = json.dumps(
-        abbreviations + [{'term': 'PRD', 'explanation': 'Project Requirement Document'}]
-    )
-
-    hints = extract_hints()
-
-    # --- LLM: OpenAI with Structured Output (recommended for strong JSON guarantees) ---
-    base_llm = ChatOpenAI(model="gpt-4o-mini", temperature=0, seed=31082025)
-    llm = base_llm.with_structured_output(LLMOutput)  # << Guarantees schema
-
-    # If you prefer Gemini, you can try:
-    # gemini = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0)
-    # llm = gemini.with_structured_output(LLMOutput)  # Works in recent LC versions; else fall back to strict JSON prompting.
-
-    prompt = ChatPromptTemplate.from_messages([
-        (
-            "system",
-            "You are a precise compliance signal extraction assistant. "
-            "Your job is to analyse a Product Requirement Document (PRD) and output potential compliance issues. "
-            "Look for both explicit keywords and functional hints that imply compliance signals. "
-            "Take geographical location into consideration; flag signals for all regions specified by the PRD. "
-            "If multiple regions are relevant, include all applicable laws. "
-            "If no region is specified, assume all regions are affected. "
-            "When you see an abbreviation in the PRD, look it up exactly in the abbreviations list provided below. "
-            "If an abbreviation in the document cannot be found in the list, return an error describing what is missing and set data to an empty list. "
-            "If no signals are found, set error to null and return an empty data array."
-        ),
-        (
-            "system",
-            "Here is the list of abbreviations as a JSON with keys 'term' and 'explanation':\n{abbreviations}\n"
-        ),
-        (
-            "system",
-            "Law hints (each law contains triggers and reason templates, and each trigger contains the signal names):\n{hints}\n"
-        ),
-        (
-            "system",
-            "Output schema (STRICT):\n"
-            "Return an object with:\n"
-            "- error: null OR a short string\n"
-            "- data: array of objects, each with fields { law, signal, reason, confidence }."
-        ),
-        (
-            "human",
-            "The PRD:\n{document}\n"
-        )
-    ])
-
-    # Build the chain: prompt → structured LLM
-    chain = prompt | llm
-
-    # Invoke
-    result: LLMOutput = chain.invoke({
-        "document": doc,
-        "abbreviations": formatted_abbrevs,
-        "hints": json.dumps(hints)
-    })
-
-    # Convert to plain dict (serializable as the exact JSON you want)
-    return result.dict()
-
-
 # =========================
 # Retriever pipeline
 # =========================
 
 def _search_with_relevance_scores(
-    vs: PineconeVectorStore, query: str, k: int, where: dict | None = None
+        vs: PineconeVectorStore, query: str, k: int, where: dict | None = None
 ) -> List[Tuple[Any, float]]:
     """
     Use similarity_search_with_score (distance) and convert to pseudo-relevance in (0,1]:
@@ -165,20 +69,20 @@ def _search_with_relevance_scores(
 
 
 def retrieve_top10_clauses(
-    *,
-    feature_text: str,
-    query_signals: list[str],
-    index_name: str,
-    namespace: str | None,
-    hf_model_name: str = "sentence-transformers/all-MiniLM-L6-v2",
-    # Candidate sizes (tune as needed):
-    k_semantic: int = 60,
-    k_per_signal: int = 25,
-    # Fusion params:
-    rrf_k: int = 60,              # RRF stabilization constant
-    lambda_signal: float = 1.5,   # weight for signal-driven ranking
-    overlap_bonus: float = 0.3,   # bonus for proportion of query signals matched
-    top_k: int = 10,
+        *,
+        feature_text: str,
+        query_signals: list[str],
+        index_name: str,
+        namespace: str | None,
+        hf_model_name: str = "sentence-transformers/all-MiniLM-L6-v2",
+        # Candidate sizes (tune as needed):
+        k_semantic: int = 60,
+        k_per_signal: int = 25,
+        # Fusion params:
+        rrf_k: int = 60,  # RRF stabilization constant
+        lambda_signal: float = 1.5,  # weight for signal-driven ranking
+        overlap_bonus: float = 0.3,  # bonus for proportion of query signals matched
+        top_k: int = 10,
 ) -> list[dict]:
     """
     Retrieve top-10 clauses by fusing semantic relevance and metadata signal overlap against
@@ -201,7 +105,7 @@ def retrieve_top10_clauses(
 
     def _uid(doc) -> str:
         m = doc.metadata or {}
-        return f"{m.get('article_number','')}__{m.get('clause_id','')}"
+        return f"{m.get('article_number', '')}__{m.get('clause_id', '')}"
 
     sem_rank: dict[str, int] = {}
     sem_rel: dict[str, float] = {}
@@ -275,6 +179,7 @@ def retrieve_top10_clauses(
 
     return results
 
+
 # =========================
 # Reasoner Pipeline
 # =========================
@@ -317,12 +222,12 @@ def _format_matches(matches: List[Dict[str, Any]]) -> str:
 
 
 def reason_feature_geo_compliance(
-    *,
-    feature: Dict[str, str],
-    matches: List[Dict[str, Any]],
-    llm: Optional[Any] = None,
-    model: str = "gpt-4o-mini",
-    temperature: float = 0.0,
+        *,
+        feature: Dict[str, str],
+        matches: List[Dict[str, Any]],
+        llm: Optional[Any] = None,
+        model: str = "gpt-4o-mini",
+        temperature: float = 0.0,
 ) -> Dict[str, Any]:
     """
     Decide whether the feature needs geo-specific compliance logic,
@@ -478,7 +383,6 @@ with colB:
 
 run = st.button("Run Full Pipeline", type="primary", use_container_width=True)
 
-
 # -------------------------
 # Pipeline Run
 # -------------------------
@@ -536,7 +440,7 @@ if run:
     st.subheader("📚 Retrieved Clauses (Top Matches)")
     if results:
         for r in results:
-            header = f"{r.get('clause_id')} — Art. {r.get('article_number','')} — {r.get('article_title','')}"
+            header = f"{r.get('clause_id')} — Art. {r.get('article_number', '')} — {r.get('article_title', '')}"
             with st.expander(header):
                 st.write(r.get("text", ""))
                 meta_cols = st.columns(3)
@@ -582,4 +486,3 @@ if run:
     st.markdown("---")
     with st.expander("Debug: Feature Text Sent to Retriever"):
         st.code(feature_text)
-        
