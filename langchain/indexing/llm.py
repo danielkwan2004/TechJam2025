@@ -2,12 +2,13 @@
 from transformers import AutoTokenizer, AutoModel
 import torch
 
-class LegalBERTEmbedder:
+class Embedder:
     """
-    Local LegalBERT embedder: mean-pooled token embeddings + L2 normalization.
+    Local embedder: mean-pooled token embeddings + L2 normalization.
     Uses AutoModel (not AutoModelForPreTraining) because we only need embeddings.
     """
-    def __init__(self, model_name: str = "nlpaueb/legal-bert-base-uncased", device: str | None = None):
+    # note that the default is irrelevant
+    def __init__(self, model_name: str = "nlpaueb/legal-bert-base-uncased", device: str | None = None): 
         if device is None:
             device = "cuda" if torch.cuda.is_available() else "cpu"
         self.device = torch.device(device)

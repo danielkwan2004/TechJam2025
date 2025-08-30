@@ -267,4 +267,151 @@ def parse_legal_html_to_json(html_path: str, output_path: str) -> None:
 
     print(f"Wrote {len(out)} articles to {output_path}")
     
-parse_legal_html_to_json("./files/EU_DSA.html", "articles.json")
+def clean_text(s: str) -> str:
+    return re.sub(r"\s+", " ", (s or "")).strip()
+
+def norm_num(s: str) -> str:
+    return str(int(s)) if s and s.isdigit() else s
+
+def extract_table_right_text(table) -> str:
+    """Get the text from the second <td> of each row, joining multiple <p>s."""
+    parts = []
+    for row in table.find_all("tr"):
+        tds = row.find_all("td")
+        if len(tds) >= 2:
+            # Right cell may contain multiple <p>
+            ps = tds[1].find_all("p")
+            if ps:
+                parts.extend(clean_text(p.get_text(" ")) for p in ps if clean_text(p.get_text(" ")))
+            else:
+                parts.append(clean_text(tds[1].get_text(" ")))
+    return " ".join(p for p in parts if p)
+
+def parse_legal_html_to_json(html_content: str) -> list[dict]:
+    soup = BeautifulSoup(html_content, "html.parser")
+    results = []
+
+    # Iterate all legal subdivisions (articles & recitals)
+    for sub in soup.find_all("div", class_="eli-subdivision", id=True):
+        sid = sub["id"]
+
+        # ---------- ARTICLES ----------
+        if sid.startswith("art_"):
+            article_number = norm_num(sid.split("_", 1)[1])
+
+            # Title
+            title = "No Title"
+            t = sub.find("div", class_="eli-title")
+            if t:
+                pt = t.find("p", class_="oj-sti-art")
+                if pt:
+                    title = clean_text(pt.get_text(" "))
+
+            article_obj = {
+                "type": "article",
+                "article_number": article_number,
+                "title": title,
+                "clauses": []
+            }
+
+            # Clause divs like 030.001
+            for cdiv in sub.find_all("div", id=re.compile(r"^\d{3}\.\d{3}$"), recursive=False):
+                raw = cdiv["id"]
+                m = re.match(r"^(\d{3})\.(\d{3})$", raw)
+                if not m:
+                    continue
+                art3, cl3 = m.groups()
+                art_norm, cl_norm = norm_num(art3), norm_num(cl3)
+                base_clause_id = f"{art_norm}.{cl_norm}"  # e.g., 30.1
+
+                # Immediate <p> text (not from inside tables)
+                ps = cdiv.find_all("p", class_="oj-normal", recursive=False)
+                main_text = " ".join(
+                    clean_text(p.get_text(" ")) for p in ps if clean_text(p.get_text(" "))
+                )
+
+                tables = cdiv.find_all("table", recursive=False)
+                if tables:
+                    # Keep preamble/conclusion as the base clause
+                    if main_text:
+                        article_obj["clauses"].append({
+                            "clause_id": base_clause_id,
+                            "clause_text": main_text
+                        })
+                    # Each table row -> subclause 30.1(a), 30.1(b), ...
+                    for table in tables:
+                        for row in table.find_all("tr"):
+                            tds = row.find_all("td")
+                            if len(tds) < 2:
+                                continue
+                            label_raw = clean_text(tds[0].get_text(" "))
+                            label = re.sub(r"[^A-Za-z0-9]", "", label_raw)  # "(a)" -> "a"
+                            if not label:
+                                continue
+                            right_text = extract_table_right_text(table) if tds[1].find("table") else None
+                            sub_text = right_text or " ".join(
+                                clean_text(p.get_text(" ")) for p in tds[1].find_all("p")
+                            ) or clean_text(tds[1].get_text(" "))
+                            article_obj["clauses"].append({
+                                "clause_id": f"{base_clause_id}({label})",
+                                "clause_text": sub_text
+                            })
+                else:
+                    if main_text:
+                        article_obj["clauses"].append({
+                            "clause_id": base_clause_id,
+                            "clause_text": main_text
+                        })
+
+            results.append(article_obj)
+            continue
+
+        # ---------- RECITALS (rct_###) ----------
+        if sid.startswith("rct_"):
+            rec_num_raw = sid.split("_", 1)[1]  # e.g., "119"
+            rec_num = norm_num(rec_num_raw)
+
+            # Recital text is usually in a single table:
+            # left td -> "(119)" label; right td -> full text
+            parts = []
+
+            # Any standalone <p class="oj-normal"> directly under the recital (rare)
+            for p in sub.find_all("p", class_="oj-normal", recursive=False):
+                txt = clean_text(p.get_text(" "))
+                if txt:
+                    parts.append(txt)
+
+            # Tables (common case)
+            for table in sub.find_all("table", recursive=False):
+                right_text = extract_table_right_text(table)
+                if right_text:
+                    parts.append(right_text)
+
+            recital_text = clean_text(" ".join(parts))
+
+            recital_obj = {
+                "type": "recital",
+                "article_number": "R",                 # keep pipeline happy; distinguishes from numeric articles
+                "recital_number": rec_num,             # convenience
+                "title": f"Recital {rec_num}",
+                "clauses": [
+                    {
+                        "clause_id": f"R{rec_num}",
+                        "clause_text": recital_text
+                    }
+                ]
+            }
+            results.append(recital_obj)
+
+    return results
+
+# ---------- Example save helper ----------
+def save_parsed_to_json(html_file: str, output_json: str):
+    with open(html_file, "r", encoding="utf-8") as f:
+        html = f.read()
+    data = parse_legal_html_to_json(html)
+    with open(output_json, "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=4)
+    print(f"Saved {len(data)} entries (articles + recitals) to {output_json}")
+    
+save_parsed_to_json("./files/EU_DSA.html", "articles.json")
