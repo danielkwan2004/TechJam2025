@@ -1,0 +1,366 @@
+[
+  {
+    "type": "article",
+    "article_number": "13-63-101",
+    "title": "Definitions.",
+    "clauses": [
+      {
+        "clause_id": "13-63-101(1)",
+        "clause_text": "\"Account holder\" means a person who has, or opens, an account or profile to use a social media company's platform.",
+        "signals": []
+      },
+      {
+        "clause_id": "13-63-101(2)",
+        "clause_text": "\"Director\" means the director of the Division of Consumer Protection created in Section 13-2-1.",
+        "signals": []
+      },
+      {
+        "clause_id": "13-63-101(3)",
+        "clause_text": "\"Division\" means the Division of Consumer Protection created in Section 13-2-1.",
+        "signals": []
+      },
+      {
+        "clause_id": "13-63-101(4)",
+        "clause_text": "\"Educational entity\" means a public school, an LEA, a charter school, the Utah Schools for the Deaf and Blind, a private school, a denominational school, a parochial school, a community college, a state college, a state university, or a nonprofit private postsecondary educational institution.",
+        "signals": []
+      },
+      {
+        "clause_id": "13-63-101(5)(a)",
+        "clause_text": "\"Interactive computer service\" means an information service, information system, or information access software provider that: (i) provides or enables computer access by multiple users to a computer server; and (ii) provides access to the Internet.",
+        "signals": []
+      },
+      {
+        "clause_id": "13-63-101(5)(b)",
+        "clause_text": "\"Interactive computer service\" includes: (i) a web service; (ii) a web system; (iii) a website; (iv) a web application; or (v) a web portal.",
+        "signals": []
+      },
+      {
+        "clause_id": "13-63-101(6)",
+        "clause_text": "\"Minor\" means an individual who is under the age of 18 and: (a) has not been emancipated as that term is defined in Section 80-7-102; or (b) has not been married.",
+        "signals": ["age_verification_required"]
+      },
+      {
+        "clause_id": "13-63-101(7)",
+        "clause_text": "\"Post\" means content that an account holder makes available on a social media platform for other account holders or users to view.",
+        "signals": []
+      },
+      {
+        "clause_id": "13-63-101(8)",
+        "clause_text": "\"Social media company\" means a person or entity that: (a) provides a social media platform that has at least 5,000,000 account holders worldwide; and (b) is an interactive computer service.",
+        "signals": []
+      },
+      {
+        "clause_id": "13-63-101(9)(a)",
+        "clause_text": "\"Social media platform\" means an online forum that a social media company makes available for an account holder to: (i) create a profile; (ii) upload posts; (iii) view the posts of other account holders; and (iv) interact with other account holders or users.",
+        "signals": []
+      },
+      {
+        "clause_id": "13-63-101(9)(b)",
+        "clause_text": "\"Social media platform\" does not include an online service, website, or application: ...",
+        "signals": []
+      },
+      {
+        "clause_id": "13-63-101(10)",
+        "clause_text": "\"User\" means a person who has access to view all, or some of, the posts on a social media platform, but is not an account holder.",
+        "signals": []
+      },
+      {
+        "clause_id": "13-63-101(11)(a)",
+        "clause_text": "\"Utah account holder\" means a person who is a Utah resident and an account holder.",
+        "signals": []
+      },
+      {
+        "clause_id": "13-63-101(11)(b)",
+        "clause_text": "\"Utah account holder\" includes a Utah minor account holder.",
+        "signals": ["age_verification_required"]
+      },
+      {
+        "clause_id": "13-63-101(12)",
+        "clause_text": "\"Utah minor account holder\" means a Utah account holder who is a minor.",
+        "signals": ["age_verification_required"]
+      },
+      {
+        "clause_id": "13-63-101(13)",
+        "clause_text": "\"Utah resident\" means an individual who currently resides in Utah.",
+        "signals": []
+      }
+    ]
+  },
+  {
+    "type": "article",
+    "article_number": "13-63-102",
+    "title": "Age requirements for use of social media platform — Parental consent — Rulemaking authority of division.",
+    "clauses": [
+      {
+        "clause_id": "13-63-102(1)",
+        "clause_text": "Beginning March 1, 2024, a social media company may not permit a Utah resident who is a minor to be an account holder on the company's social media platform unless the minor has the express consent of a parent or guardian.",
+        "signals": ["age_verification_required","parental_consent_required"]
+      },
+      {
+        "clause_id": "13-63-102(2)",
+        "clause_text": "A social media company may not permit a Utah resident who is a minor to hold or open an account if the minor is ineligible under any other provision of state or federal law.",
+        "signals": ["age_verification_required"]
+      },
+      {
+        "clause_id": "13-63-102(3)(a)",
+        "clause_text": "Beginning March 1, 2024, a social media company shall verify the age of an existing or new Utah account holder and, if a minor, confirm parental consent: (i) for a new account, at account opening; or (ii) for an existing account holder who has not provided verification, within 14 calendar days of the attempt to access the account.",
+        "signals": ["age_verification_required","parental_consent_required"]
+      },
+      {
+        "clause_id": "13-63-102(3)(b)",
+        "clause_text": "If a Utah account holder fails to meet verification requirements within the required time period, the company shall deny access upon expiration of that period and until all verification requirements are met.",
+        "signals": ["age_verification_required"]
+      },
+      {
+        "clause_id": "13-63-102(4)",
+        "clause_text": "The division shall, by rule and considering stakeholder input, establish: processes for age verification; acceptable identification methods (not limited to government IDs); confirmation requirements for received information; processes to confirm parental consent; requirements for retaining, protecting, and securely disposing of collected information; limits on use of collected information to compliance purposes only; U.S. principal place of business for any permitted verification agent; coordination with other state agencies; and consistency with state and federal law, including the Utah Consumer Privacy Act.",
+        "signals": ["age_verification_required","parental_consent_required","minimized_data_collection"]
+      }
+    ]
+  },
+  {
+    "type": "article",
+    "article_number": "13-63-103",
+    "title": "Prohibition on data collection for certain accounts — Prohibition on advertising — Use of information — Search results — Directed content.",
+    "clauses": [
+      {
+        "clause_id": "13-63-103(1)",
+        "clause_text": "Prohibit direct messaging between the account and any other user not linked to the account through friending.",
+        "signals": ["block_unfriended_dm"]
+      },
+      {
+        "clause_id": "13-63-103(2)",
+        "clause_text": "Do not show the account in search results for any user not linked through friending.",
+        "signals": ["hide_minor_search"]
+      },
+      {
+        "clause_id": "13-63-103(3)",
+        "clause_text": "Prohibit the display of any advertising in the account.",
+        "signals": ["no_targeted_ads"]
+      },
+      {
+        "clause_id": "13-63-103(4)",
+        "clause_text": "Do not collect or use any personal information from posts, content, messages, text, or usage activities other than what is necessary to comply with and verify compliance with law, including parent or guardian name, birth date, and any other required information.",
+        "signals": ["minimized_data_collection"]
+      },
+      {
+        "clause_id": "13-63-103(5)",
+        "clause_text": "Prohibit the use of targeted or suggested groups, services, products, posts, accounts, or users in the account.",
+        "signals": ["no_targeted_ads"]
+      }
+    ]
+  },
+  {
+    "type": "article",
+    "article_number": "13-63-104",
+    "title": "Parental access to social media account.",
+    "clauses": [
+      {
+        "clause_id": "13-63-104(1)",
+        "clause_text": "Provide a parent or guardian who has given consent a password or other means to access the account to view all posts by the Utah minor account holder.",
+        "signals": ["parental_view_access"]
+      },
+      {
+        "clause_id": "13-63-104(2)",
+        "clause_text": "Provide access to view all responses and messages sent to or by the Utah minor account holder.",
+        "signals": ["parental_view_access"]
+      }
+    ]
+  },
+  {
+    "type": "article",
+    "article_number": "13-63-105",
+    "title": "Limited hours of access for minors — Parental access and options.",
+    "clauses": [
+      {
+        "clause_id": "13-63-105(1)",
+        "clause_text": "Prohibit access by a Utah minor account holder from 10:30 p.m. to 6:30 a.m., unless modified under this section.",
+        "signals": ["access_curfew_10_30_to_6_30"]
+      },
+      {
+        "clause_id": "13-63-105(2)",
+        "clause_text": "Calculate time of day based on the IP address used by the Utah minor account holder at the time of attempting access.",
+        "signals": ["access_curfew_10_30_to_6_30"]
+      },
+      {
+        "clause_id": "13-63-105(3)",
+        "clause_text": "Provide options for a parent or guardian to change or eliminate the time-of-day restriction and to set a daily hour limit.",
+        "signals": ["parental_usage_limits"]
+      },
+      {
+        "clause_id": "13-63-105(4)",
+        "clause_text": "Do not permit a Utah minor account holder to change or bypass access restrictions.",
+        "signals": ["access_curfew_10_30_to_6_30"]
+      },
+      {
+        "clause_id": "13-63-105(5)",
+        "clause_text": "Permit a parent or guardian to access the account without time restrictions.",
+        "signals": ["parental_usage_limits"]
+      }
+    ]
+  },
+  {
+    "type": "article",
+    "article_number": "13-63-201",
+    "title": "Investigative powers of the division.",
+    "clauses": [
+      {
+        "clause_id": "13-63-201(1)",
+        "clause_text": "The division shall receive consumer complaints alleging a violation of Part 1, General Requirements.",
+        "signals": []
+      },
+      {
+        "clause_id": "13-63-201(2)",
+        "clause_text": "Any person may file a consumer complaint alleging a violation of Part 1 with the division.",
+        "signals": []
+      },
+      {
+        "clause_id": "13-63-201(3)",
+        "clause_text": "The division shall investigate consumer complaints to determine whether a violation occurred.",
+        "signals": []
+      }
+    ]
+  },
+  {
+    "type": "article",
+    "article_number": "13-63-202",
+    "title": "Enforcement powers of the division.",
+    "clauses": [
+      {
+        "clause_id": "13-63-202(1)",
+        "clause_text": "Except for a private right of action under Section 13-63-301, the division has exclusive authority to administer and enforce Part 1, General Requirements.",
+        "signals": []
+      },
+      {
+        "clause_id": "13-63-202(2)",
+        "clause_text": "The attorney general, upon request, shall give legal advice to and act as counsel for the division.",
+        "signals": []
+      },
+      {
+        "clause_id": "13-63-202(3)(a)",
+        "clause_text": "Subject to the ability to cure under Subsection (4): (i) the division director may impose an administrative fine of up to $2,500 per violation; and (ii) the division may bring an action in court to enforce Part 1.",
+        "signals": []
+      },
+      {
+        "clause_id": "13-63-202(3)(b)",
+        "clause_text": "In a court action, the court may declare a violation, issue an injunction, order disgorgement and payment to injured purchasers or consumers, impose a civil penalty up to $2,500 per violation, award actual damages, and grant other reasonable relief.",
+        "signals": []
+      },
+      {
+        "clause_id": "13-63-202(4)(a)",
+        "clause_text": "At least 30 days before initiating an enforcement action, the division shall provide written notice identifying each alleged violation and explaining the basis for each allegation.",
+        "signals": []
+      },
+      {
+        "clause_id": "13-63-202(4)(b)",
+        "clause_text": "The division may not initiate an action if the person cures the noticed violation within 30 days and provides a written statement that the violation has been cured and will not recur.",
+        "signals": []
+      },
+      {
+        "clause_id": "13-63-202(4)(c)",
+        "clause_text": "The division may initiate a civil action against a person who fails to cure after notice or who commits another violation of the same provision after curing and certifying.",
+        "signals": []
+      },
+      {
+        "clause_id": "13-63-202(5)",
+        "clause_text": "If judgment or injunctive relief is granted to the division, the court shall award reasonable attorney fees, court costs, and investigative fees.",
+        "signals": []
+      },
+      {
+        "clause_id": "13-63-202(6)",
+        "clause_text": "A person who violates an administrative or court order for a Part 1 violation is subject to a civil penalty of no more than $5,000 per violation, which may be imposed in any civil action brought by the division or the attorney general on its behalf.",
+        "signals": []
+      },
+      {
+        "clause_id": "13-63-202(7)",
+        "clause_text": "All money received for fines or civil penalties shall be deposited into the Consumer Protection Education and Training Fund established in Section 13-2-8.",
+        "signals": []
+      }
+    ]
+  },
+  {
+    "type": "article",
+    "article_number": "13-63-203",
+    "title": "Division report.",
+    "clauses": [
+      {
+        "clause_id": "13-63-203(1)",
+        "clause_text": "The division shall compile an annual report evaluating liability and enforcement provisions (including effectiveness and recommendations), summarizing protected and unprotected consumer interactions (including a list of alleged violations received), and accounting for all administrative fines and civil penalties assessed and collected and use of fund monies.",
+        "signals": []
+      },
+      {
+        "clause_id": "13-63-203(2)",
+        "clause_text": "The division may update or correct the report as new information becomes available.",
+        "signals": []
+      },
+      {
+        "clause_id": "13-63-203(3)",
+        "clause_text": "The division shall submit the report to the Business and Labor Interim Committee on or before the August meeting of each interim period.",
+        "signals": []
+      }
+    ]
+  },
+  {
+    "type": "article",
+    "article_number": "13-63-301",
+    "title": "Private right of action for Violation of General Requirements.",
+    "clauses": [
+      {
+        "clause_id": "13-63-301(1)",
+        "clause_text": "Beginning March 1, 2024, a person may bring an action against a person that does not comply with a requirement of Part 1, General Requirements.",
+        "signals": []
+      },
+      {
+        "clause_id": "13-63-301(2)",
+        "clause_text": "A suit filed under the authority of this section shall be filed in the district court for the district in which a person bringing the action resides.",
+        "signals": []
+      },
+      {
+        "clause_id": "13-63-301(3)",
+        "clause_text": "If a court finds a violation, the person bringing the action is entitled to an award of reasonable attorney fees and court costs and an amount equal to the greater of: (i) $2,500 per incident of violation; or (ii) actual damages for financial, physical, and emotional harm directly caused by the violation(s).",
+        "signals": []
+      }
+    ]
+  },
+  {
+    "type": "article",
+    "article_number": "13-63-401",
+    "title": "Waiver prohibited.",
+    "clauses": [
+      {
+        "clause_id": "13-63-401",
+        "clause_text": "A waiver or limitation of: (1) a protection or requirement under this chapter; (2) the right to cooperate with the division or to file a complaint with the division; or (3) the right to a private right of action under this chapter—is void, against public policy, and not enforceable notwithstanding any contract or choice-of-law provision.",
+        "signals": []
+      }
+    ]
+  },
+  {
+    "type": "article",
+    "article_number": "13-63-501",
+    "title": "Severability.",
+    "clauses": [
+      {
+        "clause_id": "13-63-501",
+        "clause_text": "If any provision of this chapter or its application is held invalid by a final decision of a court of competent jurisdiction, the remainder shall be given effect without the invalid provision or application; the provisions are severable.",
+        "signals": []
+      }
+    ]
+  },
+  {
+    "type": "article",
+    "article_number": "Act-Effective",
+    "title": "Effective date.",
+    "clauses": [
+      {
+        "clause_id": "Act-Effective(1)",
+        "clause_text": "Except as provided in Subsection (2), this bill takes effect on May 3, 2023.",
+        "signals": []
+      },
+      {
+        "clause_id": "Act-Effective(2)",
+        "clause_text": "The actions affecting Section 13-2-1 (Effective 12/31/2023) take effect on December 31, 2023.",
+        "signals": []
+      }
+    ]
+  }
+]

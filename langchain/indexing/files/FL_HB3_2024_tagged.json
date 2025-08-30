@@ -1,0 +1,510 @@
+[
+  {
+    "type": "article",
+    "article_number": "501.1736",
+    "title": "Social media use for minors.",
+    "clauses": [
+      {
+        "clause_id": "501.1736(1)",
+        "clause_text": "As used in this section, the term:",
+        "signals": []
+      },
+      {
+        "clause_id": "501.1736(1)(a)",
+        "clause_text": "\"Account holder\" means a resident who opens an account or creates a profile or is identified by the social media platform by a unique identifier while using or accessing a social media platform when the social media platform knows or has reason to believe the resident is located in this state.",
+        "signals": []
+      },
+      {
+        "clause_id": "501.1736(1)(b)",
+        "clause_text": "\"Daily active users\" means the number of unique users in the United States who used the online forum, website, or application at least 80 percent of the days during the previous 12 months, or, if the online forum, website, or application did not exist during the previous 12 months, the number of unique users in the United States who used the online forum, website, or application at least 80 percent of the days during the previous month.",
+        "signals": []
+      },
+      {
+        "clause_id": "501.1736(1)(c)",
+        "clause_text": "\"Department\" means the Department of Legal Affairs.",
+        "signals": []
+      },
+      {
+        "clause_id": "501.1736(1)(d)",
+        "clause_text": "\"Resident\" means a person who lives in this state for more than 6 months of the year.",
+        "signals": []
+      },
+      {
+        "clause_id": "501.1736(1)(e)",
+        "clause_text": "\"Social media platform\" means an online forum, website, or application that satisfies each of the following criteria. The term does not include an online service, website, or application where the exclusive function is e-mail or direct messaging consisting of text, photographs, pictures, images, or videos shared only between the sender and the recipients, without displaying or posting publicly or to other users not specifically identified as the recipients by the sender.",
+        "signals": []
+      },
+      {
+        "clause_id": "501.1736(1)(e)(1)",
+        "clause_text": "Allows users to upload content or view the content or activity of other users;",
+        "signals": []
+      },
+      {
+        "clause_id": "501.1736(1)(e)(2)",
+        "clause_text": "Ten percent or more of the daily active users who are younger than 16 years of age spend on average 2 hours per day or longer on the online forum, website, or application on the days when using the online forum, website, or application during the previous 12 months or, if the online forum, website, or application did not exist during the previous 12 months, during the previous month;",
+        "signals": []
+      },
+      {
+        "clause_id": "501.1736(1)(e)(3)",
+        "clause_text": "Employs algorithms that analyze user data or information on users to select content for users; and",
+        "signals": []
+      },
+      {
+        "clause_id": "501.1736(1)(e)(4)",
+        "clause_text": "Has any of the following addictive features:",
+        "signals": []
+      },
+      {
+        "clause_id": "501.1736(1)(e)(4)(a)",
+        "clause_text": "Infinite scrolling, which means either:",
+        "signals": []
+      },
+      {
+        "clause_id": "501.1736(1)(e)(4)(a)(I)",
+        "clause_text": "Continuously loading content, or content that loads as the user scrolls down the page without the need to open a separate page; or",
+        "signals": []
+      },
+      {
+        "clause_id": "501.1736(1)(e)(4)(a)(II)",
+        "clause_text": "Seamless content, or the use of pages with no visible or apparent end or page breaks.",
+        "signals": []
+      },
+      {
+        "clause_id": "501.1736(1)(e)(4)(b)",
+        "clause_text": "Push notifications or alerts sent by the online forum, website, or application to inform a user about specific activities or events related to the user's account.",
+        "signals": []
+      },
+      {
+        "clause_id": "501.1736(1)(e)(4)(c)",
+        "clause_text": "Displays personal interactive metrics that indicate the number of times other users have clicked a button to indicate their reaction to content or have shared or reposted the content.",
+        "signals": []
+      },
+      {
+        "clause_id": "501.1736(1)(e)(4)(d)",
+        "clause_text": "Auto-play video or video that begins to play without the user first clicking on the video or on a play button for that video.",
+        "signals": []
+      },
+      {
+        "clause_id": "501.1736(1)(e)(4)(e)",
+        "clause_text": "Live-streaming or a function that allows a user or advertiser to broadcast live video content in real time.",
+        "signals": []
+      },
+      {
+        "clause_id": "501.1736(2)(a)",
+        "clause_text": "A social media platform shall prohibit a minor who is younger than 14 years of age from entering into a contract with a social media platform to become an account holder.",
+        "signals": ["underage_account_creation_prohibited"]
+      },
+      {
+        "clause_id": "501.1736(2)(b)",
+        "clause_text": "A social media platform shall:",
+        "signals": []
+      },
+      {
+        "clause_id": "501.1736(2)(b)(1)",
+        "clause_text": "Terminate any account held by an account holder younger than 14 years of age, including accounts that the social media platform treats or categorizes as belonging to an account holder who is likely younger than 14 years of age for purposes of targeting content or advertising, and provide 90 days for an account holder to dispute such termination. Termination must be effective upon the expiration of the 90 days if the account holder fails to effectively dispute the termination.",
+        "signals": ["account_termination_without_consent"]
+      },
+      {
+        "clause_id": "501.1736(2)(b)(2)",
+        "clause_text": "Allow an account holder younger than 14 years of age to request to terminate the account. Termination must be effective within 5 business days after such request.",
+        "signals": []
+      },
+      {
+        "clause_id": "501.1736(2)(b)(3)",
+        "clause_text": "Allow the confirmed parent or guardian of an account holder younger than 14 years of age to request that the minor's account be terminated. Termination must be effective within 10 business days after such request.",
+        "signals": []
+      },
+      {
+        "clause_id": "501.1736(2)(b)(4)",
+        "clause_text": "Permanently delete all personal information held by the social media platform relating to the terminated account, unless there are legal requirements to maintain such information.",
+        "signals": ["personal_information_deletion_on_termination"]
+      },
+      {
+        "clause_id": "501.1736(3)(a)",
+        "clause_text": "A social media platform shall prohibit a minor who is 14 or 15 years of age from entering into a contract with a social media platform to become an account holder, unless the minor's parent or guardian provides consent for the minor to become an account holder.",
+        "signals": [
+          "underage_account_creation_prohibited",
+          "parental_consent_required_for_14_15"
+        ]
+      },
+      {
+        "clause_id": "501.1736(3)(b)",
+        "clause_text": "A social media platform shall:",
+        "signals": []
+      },
+      {
+        "clause_id": "501.1736(3)(b)(1)",
+        "clause_text": "Terminate any account held by an account holder who is 14 or 15 years of age, including accounts that the social media platform treats or categorizes as belonging to an account holder who is likely 14 or 15 years of age for purposes of targeting content or advertising, if the account holder's parent or guardian has not provided consent for the minor to create or maintain the account. The social media platform shall provide 90 days for an account holder to dispute such termination. Termination must be effective upon the expiration of the 90 days if the account holder fails to effectively dispute the termination.",
+        "signals": [
+          "account_termination_without_consent",
+          "parental_consent_required_for_14_15"
+        ]
+      },
+      {
+        "clause_id": "501.1736(3)(b)(2)",
+        "clause_text": "Allow an account holder who is 14 or 15 years of age to request to terminate the account. Termination must be effective within 5 business days after such request.",
+        "signals": []
+      },
+      {
+        "clause_id": "501.1736(3)(b)(3)",
+        "clause_text": "Allow the confirmed parent or guardian of an account holder who is 14 or 15 years of age to request that the minor's account be terminated. Termination must be effective within 10 business days after such request.",
+        "signals": []
+      },
+      {
+        "clause_id": "501.1736(3)(b)(4)",
+        "clause_text": "Permanently delete all personal information held by the social media platform relating to the terminated account, unless there are legal requirements to maintain such information.",
+        "signals": ["personal_information_deletion_on_termination"]
+      },
+      {
+        "clause_id": "501.1736(4)",
+        "clause_text": "If a court enjoins the enforcement of subsection (3) or would otherwise enjoin enforcement of any other provision of this section due to subsection (3), then subsection (3) shall be severed, and the following shall come into effect:",
+        "signals": []
+      },
+      {
+        "clause_id": "501.1736(4)(a)",
+        "clause_text": "A social media platform shall prohibit a minor who is 14 or 15 years of age from entering into a contract with a social media platform to become an account holder.",
+        "signals": ["underage_account_creation_prohibited"]
+      },
+      {
+        "clause_id": "501.1736(4)(b)",
+        "clause_text": "A social media platform shall:",
+        "signals": []
+      },
+      {
+        "clause_id": "501.1736(4)(b)(1)",
+        "clause_text": "Terminate any account held by an account holder who is 14 or 15 years of age, including accounts that the social media platform treats or categorizes as belonging to an account holder who is likely 14 or 15 years of age for purposes of targeting content or advertising, and provide 90 days for an account holder to dispute such termination. Termination must be effective upon the expiration of 90 days if the account holder fails to effectively dispute the termination.",
+        "signals": ["account_termination_without_consent"]
+      },
+      {
+        "clause_id": "501.1736(4)(b)(2)",
+        "clause_text": "Allow an account holder who is 14 or 15 years of age to request to terminate the account. Termination must be effective within 5 business days after such request.",
+        "signals": []
+      },
+      {
+        "clause_id": "501.1736(4)(b)(3)",
+        "clause_text": "Allow the confirmed parent or guardian of an account holder who is 14 or 15 years of age to request that the minor's account be terminated. Termination must be effective within 10 business days after such request.",
+        "signals": []
+      },
+      {
+        "clause_id": "501.1736(4)(b)(4)",
+        "clause_text": "Permanently delete all personal information held by the social media platform relating to the terminated account, unless there are legal requirements to maintain such information.",
+        "signals": ["personal_information_deletion_on_termination"]
+      },
+      {
+        "clause_id": "501.1736(5)",
+        "clause_text": "Any knowing or reckless violation of subsection (2), subsection (3), or, if in effect, subsection (4) is deemed an unfair and deceptive trade practice actionable under part II of this chapter solely by the department against a social media platform. If the department has reason to believe that a social media platform is in violation of subsection (2), subsection (3), or, if in effect, subsection (4), the department, as the enforcing authority, may bring an action against such platform for an unfair or deceptive act or practice. For the purpose of bringing an action pursuant to this section, ss. 501.211 and 501.212 do not apply. In addition to other remedies under part II of this chapter, the department may collect a civil penalty of up to $50,000 per violation and reasonable attorney fees and court costs. When the social media platform's failure to comply with subsection (2), subsection (3), or, if in effect, subsection (4) is a consistent pattern of knowing or reckless conduct, punitive damages may be assessed against the social media platform.",
+        "signals": ["civil_penalties_for_violations"]
+      },
+      {
+        "clause_id": "501.1736(6)(a)",
+        "clause_text": "A social media platform that knowingly or recklessly violates subsection (2), subsection (3), or, if in effect, subsection (4) is liable to the minor account holder, including court costs and reasonable attorney fees as ordered by the court. Claimants may be awarded up to $10,000 in damages.",
+        "signals": ["civil_penalties_for_violations"]
+      },
+      {
+        "clause_id": "501.1736(6)(b)",
+        "clause_text": "A civil action for a claim under this subsection must be brought within 1 year from the date the complainant knew, or reasonably should have known, of the alleged violation.",
+        "signals": ["civil_penalties_for_violations"]
+      },
+      {
+        "clause_id": "501.1736(6)(c)",
+        "clause_text": "Any action brought under this subsection may only be brought on behalf of a minor account holder.",
+        "signals": []
+      },
+      {
+        "clause_id": "501.1736(7)",
+        "clause_text": "For purposes of bringing an action under this section, a social media platform that allows a minor account holder younger than 14 years of age or a minor account holder who is 14 or 15 years of age to create an account on such platform is considered to be both engaged in substantial and not isolated activities within this state and operating, conducting, engaging in, or carrying on a business and doing business in this state, and is therefore subject to the jurisdiction of the courts of this state.",
+        "signals": []
+      },
+      {
+        "clause_id": "501.1736(8)",
+        "clause_text": "If a social media platform allows an account holder to use the social media platform, the parties have entered into a contract.",
+        "signals": []
+      },
+      {
+        "clause_id": "501.1736(9)",
+        "clause_text": "This section does not preclude any other available remedy at law or equity.",
+        "signals": []
+      },
+      {
+        "clause_id": "501.1736(10)(a)",
+        "clause_text": "If, by its own inquiry or as a result of complaints, the department has reason to believe that an entity or person has engaged in, or is engaging in, an act or practice that violates this section, the department may administer oaths and affirmations, subpoena witnesses or matter, and collect evidence. Within 5 days, excluding weekends and legal holidays, after the service of a subpoena or at any time before the return date specified therein, whichever is longer, the party served may file in the circuit court in the county in which it resides or in which it transacts business and serve upon the enforcing authority a petition for an order modifying or setting aside the subpoena. The petitioner may raise any objection or privilege which would be available upon service of such subpoena in a civil action. The subpoena shall inform the party served of its rights under this subsection.",
+        "signals": []
+      },
+      {
+        "clause_id": "501.1736(10)(b)",
+        "clause_text": "If the matter that the department seeks to obtain by subpoena is located outside the state, the entity or person subpoenaed may make it available to the department or its representative to examine the matter at the place where it is located. The department may designate representatives, including officials of the state in which the matter is located, to inspect the matter on its behalf, and may respond to similar requests from officials of other states.",
+        "signals": []
+      },
+      {
+        "clause_id": "501.1736(10)(c)",
+        "clause_text": "Upon failure of an entity or person without lawful excuse to obey a subpoena and upon reasonable notice to all persons affected, the department may apply to the circuit court for an order compelling compliance.",
+        "signals": []
+      },
+      {
+        "clause_id": "501.1736(10)(d)",
+        "clause_text": "The department may request that an entity or person that refuses to comply with a subpoena on the ground that testimony or matter may incriminate the entity or person be ordered by the court to provide the testimony or matter. Except in a prosecution for perjury, an entity or individual that complies with a court order to provide testimony or matter after asserting a valid privilege against self-incrimination shall not have the testimony or matter so provided, or evidence derived therefrom, received against the entity or person in any criminal investigation or proceeding.",
+        "signals": []
+      },
+      {
+        "clause_id": "501.1736(10)(e)",
+        "clause_text": "Any entity or person upon whom a subpoena is served pursuant to this section shall comply with the terms thereof unless otherwise provided by order of the court. Any entity or person that fails to appear with the intent to avoid, evade, or prevent compliance in whole or in part with any investigation under this part or who removes from any place, conceals, withholds, mutilates, alters, or destroys, or by any other means falsifies any documentary material in the possession, custody, or control of any entity or person subject to any such subpoena, or knowingly conceals any relevant information with the intent to avoid, evade, or prevent compliance shall be liable for a civil penalty of not more than $5,000 per week in violation, reasonable attorney's fees, and costs.",
+        "signals": ["civil_penalties_for_violations"]
+      },
+      {
+        "clause_id": "501.1736(11)",
+        "clause_text": "The department may adopt rules to implement this section.",
+        "signals": []
+      }
+    ]
+  },
+  {
+    "type": "article",
+    "article_number": "501.1737",
+    "title": "Age verification for online access to materials harmful to minors.",
+    "clauses": [
+      {
+        "clause_id": "501.1737(1)",
+        "clause_text": "As used in this section, the term:",
+        "signals": []
+      },
+      {
+        "clause_id": "501.1737(1)(a)",
+        "clause_text": "\"Anonymous age verification\" has the same meaning as in s. 501.1738.",
+        "signals": []
+      },
+      {
+        "clause_id": "501.1737(1)(b)",
+        "clause_text": "\"Commercial entity\" includes a corporation, a limited liability company, a partnership, a limited partnership, a sole proprietorship, and any other legally recognized entity.",
+        "signals": []
+      },
+      {
+        "clause_id": "501.1737(1)(c)",
+        "clause_text": "\"Department\" means the Department of Legal Affairs.",
+        "signals": []
+      },
+      {
+        "clause_id": "501.1737(1)(d)",
+        "clause_text": "\"Distribute\" means to issue, sell, give, provide, deliver, transfer, transmit, circulate, or disseminate by any means.",
+        "signals": []
+      },
+      {
+        "clause_id": "501.1737(1)(e)",
+        "clause_text": "\"Material harmful to minors\" means any material that:",
+        "signals": []
+      },
+      {
+        "clause_id": "501.1737(1)(e)(1)",
+        "clause_text": "The average person applying contemporary community standards would find, taken as a whole, appeals to the prurient interest;",
+        "signals": []
+      },
+      {
+        "clause_id": "501.1737(1)(e)(2)",
+        "clause_text": "Depicts or describes, in a patently offensive way, sexual conduct as specifically defined in s. 847.001(19); and",
+        "signals": []
+      },
+      {
+        "clause_id": "501.1737(1)(e)(3)",
+        "clause_text": "When taken as a whole, lacks serious literary, artistic, political, or scientific value for minors.",
+        "signals": []
+      },
+      {
+        "clause_id": "501.1737(1)(f)",
+        "clause_text": "\"News-gathering organization\" means any of the following:",
+        "signals": []
+      },
+      {
+        "clause_id": "501.1737(1)(f)(1)",
+        "clause_text": "A newspaper, news publication, or news source, printed or published online or on a mobile platform, engaged in reporting current news and matters of public interest, and an employee thereof who can provide documentation of such employment.",
+        "signals": []
+      },
+      {
+        "clause_id": "501.1737(1)(f)(2)",
+        "clause_text": "A radio broadcast station, television broadcast station, cable television operator, or wire service, and an employee thereof who can provide documentation of such employment.",
+        "signals": []
+      },
+      {
+        "clause_id": "501.1737(1)(g)",
+        "clause_text": "\"Publish\" means to communicate or make information available to another person or entity on a publicly available website or application.",
+        "signals": []
+      },
+      {
+        "clause_id": "501.1737(1)(h)",
+        "clause_text": "\"Resident\" means a person who lives in this state for more than 6 months of the year.",
+        "signals": []
+      },
+      {
+        "clause_id": "501.1737(1)(i)",
+        "clause_text": "\"Standard age verification\" means any commercially reasonable method of age verification approved by the commercial entity.",
+        "signals": []
+      },
+      {
+        "clause_id": "501.1737(1)(j)",
+        "clause_text": "\"Substantial portion\" means more than 33.3 percent of total material on a website or application.",
+        "signals": []
+      },
+      {
+        "clause_id": "501.1737(2)",
+        "clause_text": "A commercial entity that knowingly and intentionally publishes or distributes material harmful to minors on a website or application, if the website or application contains a substantial portion of material harmful to minors, must use either anonymous age verification or standard age verification to verify that the age of a person attempting to access the material is 18 years of age or older and prevent access to the material by a person younger than 18 years of age. The commercial entity must offer anonymous age verification and standard age verification, and a person attempting to access the material may select which method will be used to verify his or her age.",
+        "signals": [
+          "age_verification_for_harmful_material",
+          "access_prohibition_to_harmful_material_for_minors"
+        ]
+      },
+      {
+        "clause_id": "501.1737(3)",
+        "clause_text": "A commercial entity must ensure that the requirements of s. 501.1738 are met.",
+        "signals": ["age_verification_for_harmful_material"]
+      },
+      {
+        "clause_id": "501.1737(4)(a)",
+        "clause_text": "This section does not apply to any bona fide news or public interest broadcast, website video, report, or event and does not affect the rights of a news-gathering organization.",
+        "signals": []
+      },
+      {
+        "clause_id": "501.1737(4)(b)",
+        "clause_text": "An Internet service provider or its affiliates or subsidiaries, a search engine, or a cloud service provider does not violate this section solely for providing access or connection to or from a website or other information or content on the Internet or a facility, system, or network not under the provider's control, including transmission, downloading, intermediate storage, or access software, to the extent the provider is not responsible for the creation of the content of the communication which constitutes material harmful to minors.",
+        "signals": []
+      },
+      {
+        "clause_id": "501.1737(5)(a)",
+        "clause_text": "Any violation of subsection (2) or subsection (3) is deemed an unfair and deceptive trade practice actionable under part II of this chapter solely by the department on behalf of a resident minor against a commercial entity. If the department has reason to believe that a commercial entity is in violation of subsection (2) or subsection (3), the department, as the enforcing authority, may bring an action against the commercial entity for an unfair or deceptive act or practice. For the purpose of bringing an action pursuant to this section, ss. 501.211 and 501.212 do not apply. In addition to any other remedy under part II of this chapter, the department may collect a civil penalty of up to $50,000 per violation and reasonable attorney fees and court costs. When the commercial entity's failure to comply with subsection (2) or subsection (3) is a consistent pattern of conduct of the commercial entity, punitive damages may be assessed against the commercial entity.",
+        "signals": [
+          "civil_penalties_for_violations",
+          "age_verification_for_harmful_material"
+        ]
+      },
+      {
+        "clause_id": "501.1737(5)(b)",
+        "clause_text": "A third party that performs age verification for a commercial entity in violation of s. 501.1738 is deemed to have committed an unfair and deceptive trade practice actionable under part II of this chapter solely by the department against such third party. If the department has reason to believe that the third party is in violation of s. 501.1738, the department, as the enforcing authority, may bring an action against such third party for an unfair or deceptive act or practice. For the purpose of bringing an action pursuant to this section, ss. 501.211 and 501.212 do not apply. In addition to other remedies under part II of this chapter, the department may collect a civil penalty of up to $50,000 per violation and reasonable attorney fees and court costs.",
+        "signals": [
+          "civil_penalties_for_violations",
+          "age_verification_for_harmful_material"
+        ]
+      },
+      {
+        "clause_id": "501.1737(5)(c)",
+        "clause_text": "A commercial entity that violates subsection (2) for failing to prohibit access or prohibit a minor from future access to material harmful to minors after a report of unauthorized or unlawful access is liable to the minor for such access, including court costs and reasonable attorney fees as ordered by the court. Claimants may be awarded up to $10,000 in damages. A civil action for a claim under this paragraph must be brought within 1 year from the date the complainant knew, or reasonably should have known, of the alleged violation.",
+        "signals": [
+          "civil_penalties_for_violations",
+          "access_prohibition_to_harmful_material_for_minors"
+        ]
+      },
+      {
+        "clause_id": "501.1737(5)(d)",
+        "clause_text": "Any action under this subsection may only be brought on behalf of or by a resident minor.",
+        "signals": []
+      },
+      {
+        "clause_id": "501.1737(6)",
+        "clause_text": "For purposes of bringing an action under subsection (5), a commercial entity that publishes or distributes material harmful to minors on a website or application, if the website or application contains a substantial portion of material harmful to minors and such website or application is available to be accessed in this state, is considered to be both engaged in substantial and not isolated activities within this state and operating, conducting, engaging in, or carrying on a business and doing business in this state, and is therefore subject to the jurisdiction of the courts of this state.",
+        "signals": []
+      },
+      {
+        "clause_id": "501.1737(7)",
+        "clause_text": "This section does not preclude any other available remedy at law or equity.",
+        "signals": []
+      },
+      {
+        "clause_id": "501.1737(8)(a)",
+        "clause_text": "If, by its own inquiry or as a result of complaints, the department has reason to believe that an entity or person has engaged in, or is engaging in, an act or practice that violates this section, the department may administer oaths and affirmations, subpoena witnesses or matter, and collect evidence. Within 5 days, excluding weekends and legal holidays, after the service of a subpoena or at any time before the return date specified therein, whichever is longer, the party served may file in the circuit court in the county in which it resides or in which it transacts business and serve upon the enforcing authority a petition for an order modifying or setting aside the subpoena. The petitioner may raise any objection or privilege which would be available upon service of such subpoena in a civil action. The subpoena shall inform the party served of its rights under this subsection.",
+        "signals": []
+      },
+      {
+        "clause_id": "501.1737(8)(b)",
+        "clause_text": "If the matter that the department seeks to obtain by subpoena is located outside the state, the entity or person subpoenaed may make it available to the department or its representative to examine the matter at the place where it is located. The department may designate representatives, including officials of the state in which the matter is located, to inspect the matter on its behalf, and may respond to similar requests from officials of other states.",
+        "signals": []
+      },
+      {
+        "clause_id": "501.1737(8)(c)",
+        "clause_text": "Upon failure of an entity or person without lawful excuse to obey a subpoena and upon reasonable notice to all persons affected, the department may apply to the circuit court for an order compelling compliance.",
+        "signals": []
+      },
+      {
+        "clause_id": "501.1737(8)(d)",
+        "clause_text": "The department may request that an entity or person that refuses to comply with a subpoena on the ground that testimony or matter may incriminate the entity or person be ordered by the court to provide the testimony or matter. Except in a prosecution for perjury, an entity or individual that complies with a court order to provide testimony or matter after asserting a valid privilege against self-incrimination shall not have the testimony or matter so provided, or evidence derived therefrom, received against the entity or person in any criminal investigation or proceeding.",
+        "signals": []
+      },
+      {
+        "clause_id": "501.1737(8)(e)",
+        "clause_text": "Any entity or person upon whom a subpoena is served pursuant to this section shall comply with the terms thereof unless otherwise provided by order of the court. Any entity or person that fails to appear with the intent to avoid, evade, or prevent compliance in whole or in part with any investigation under this part or that removes from any place, conceals, withholds, mutilates, alters, or destroys, or by any other means falsifies any documentary material in the possession, custody, or control of any entity or person subject to any such subpoena, or knowingly conceals any relevant information with the intent to avoid, evade, or prevent compliance, shall be liable for a civil penalty of not more than $5,000 per week in violation, reasonable attorney's fees, and costs.",
+        "signals": ["civil_penalties_for_violations"]
+      },
+      {
+        "clause_id": "501.1737(9)",
+        "clause_text": "The department may adopt rules to implement this section.",
+        "signals": []
+      }
+    ]
+  },
+  {
+    "type": "article",
+    "article_number": "501.1738",
+    "title": "Anonymous age verification.",
+    "clauses": [
+      {
+        "clause_id": "501.1738(1)",
+        "clause_text": "As used in this section, the term \"anonymous age verification\" means a commercially reasonable method used by a government agency or a business for the purpose of age verification which is conducted by a nongovernmental, independent third party organized under the laws of a state of the United States which:",
+        "signals": ["age_verification_for_harmful_material"]
+      },
+      {
+        "clause_id": "501.1738(1)(a)",
+        "clause_text": "Has its principal place of business in a state of the United States;",
+        "signals": ["age_verification_for_harmful_material"]
+      },
+      {
+        "clause_id": "501.1738(1)(b)",
+        "clause_text": "Is not owned or controlled by a company formed in a foreign country, a government of a foreign country, or any other entity formed in a foreign country.",
+        "signals": ["age_verification_for_harmful_material"]
+      },
+      {
+        "clause_id": "501.1738(2)",
+        "clause_text": "A third party conducting anonymous age verification pursuant to this section:",
+        "signals": ["age_verification_for_harmful_material"]
+      },
+      {
+        "clause_id": "501.1738(2)(a)",
+        "clause_text": "May not retain personal identifying information used to verify age once the age of an account holder or a person seeking an account has been verified.",
+        "signals": ["age_verification_for_harmful_material"]
+      },
+      {
+        "clause_id": "501.1738(2)(b)",
+        "clause_text": "May not use personal identifying information used to verify age for any other purpose.",
+        "signals": ["age_verification_for_harmful_material"]
+      },
+      {
+        "clause_id": "501.1738(2)(c)",
+        "clause_text": "Must keep anonymous any personal identifying information used to verify age. Such information may not be shared or otherwise communicated to any person.",
+        "signals": ["age_verification_for_harmful_material"]
+      },
+      {
+        "clause_id": "501.1738(2)(d)",
+        "clause_text": "Must protect personal identifying information used to verify age from unauthorized or illegal access, destruction, use, modification, or disclosure through reasonable security procedures and practices appropriate to the nature of the personal information.",
+        "signals": ["age_verification_for_harmful_material"]
+      }
+    ]
+  },
+  {
+    "type": "article",
+    "article_number": "Act-4",
+    "title": "Section 4 — Severability",
+    "clauses": [
+      {
+        "clause_id": "Act-4",
+        "clause_text": "If any provision of this act or its application to any person or circumstances is held invalid, the invalidity does not affect other provisions or applications of this act which can be given effect without the invalid provision or application, and to this end the provisions of this act are severable.",
+        "signals": []
+      }
+    ]
+  },
+  {
+    "type": "article",
+    "article_number": "Act-5",
+    "title": "Section 5 — Effective date",
+    "clauses": [
+      {
+        "clause_id": "Act-5",
+        "clause_text": "This act shall take effect January 1, 2025.",
+        "signals": []
+      }
+    ]
+  }
+]

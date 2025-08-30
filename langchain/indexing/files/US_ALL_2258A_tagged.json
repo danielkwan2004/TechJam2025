@@ -1,0 +1,391 @@
+[
+  {
+    "type": "article",
+    "article_number": "2258A",
+    "title": "Reporting Requirements of Providers",
+    "clauses": [
+      {
+        "clause_id": "(a)(1)(A)(i)",
+        "clause_text": "shall, as soon as reasonably possible after obtaining actual knowledge of any facts or circumstances described in paragraph (2)(A), take the actions described in subparagraph (B);",
+        "signals": [
+          "csam_reporting"
+        ]
+      },
+      {
+        "clause_id": "(a)(1)(A)(ii)",
+        "clause_text": "may, after obtaining actual knowledge of any facts or circumstances described in paragraph (2)(B), take the actions described in subparagraph (B).",
+        "signals": [
+          "csam_reporting"
+        ]
+      },
+      {
+        "clause_id": "(a)(1)(B)(i)",
+        "clause_text": "providing to the CyberTipline of NCMEC, or any successor to the CyberTipline operated by NCMEC, the mailing address, telephone number, facsimile number, electronic mailing address of, and individual point of contact for, such provider; and",
+        "signals": [
+          "ncmec_reference",
+          "cybertipline_reference"
+        ]
+      },
+      {
+        "clause_id": "(a)(1)(B)(ii)",
+        "clause_text": "making a report of such facts or circumstances to the CyberTipline, or any successor to the CyberTipline operated by NCMEC.",
+        "signals": [
+          "cybertipline_reference",
+          "ncmec_reference",
+          "csam_reporting"
+        ]
+      },
+      {
+        "clause_id": "(a)(2)(A)",
+        "clause_text": "The facts or circumstances described in this subparagraph are any facts or circumstances from which there is an apparent violation of section 2251, 2251A, 2252, 2252A, 2252B, or 2260 that involves child pornography, of section 1591 (if the violation involves a minor), or of [1] 2422(b).",
+        "signals": [
+          "csam_reporting"
+        ]
+      },
+      {
+        "clause_id": "(a)(2)(B)",
+        "clause_text": "The facts or circumstances described in this subparagraph are any facts or circumstances which indicate a violation of any of the sections described in subparagraph (A) involving child pornography may be planned or imminent.",
+        "signals": [
+          "csam_reporting"
+        ]
+      },
+      {
+        "clause_id": "(b)(1)",
+        "clause_text": "Information about the involved individual.— Information relating to the identity of any individual who appears to have violated or plans to violate a Federal law described in subsection (a)(2), which may, to the extent reasonably practicable, include the electronic mail address, Internet Protocol address, uniform resource locator, payment information (excluding personally identifiable information), or any other identifying information, including self-reported identifying information.",
+        "signals": [
+          "include_identifiers"
+        ]
+      },
+      {
+        "clause_id": "(b)(2)",
+        "clause_text": "Historical reference.— Information relating to when and how a customer or subscriber of a provider uploaded, transmitted, or received content relating to the report or when and how content relating to the report was reported to, or discovered by the provider, including a date and time stamp and time zone.",
+        "signals": [
+          "include_complete_communication"
+        ]
+      },
+      {
+        "clause_id": "(b)(3)",
+        "clause_text": "Geographic location information.— Information relating to the geographic location of the involved individual or website, which may include the Internet Protocol address or verified address, or, if not reasonably available, at least one form of geographic identifying information, including area code or zip code, provided by the customer or subscriber, or stored or obtained by the provider.",
+        "signals": [
+          "inclde_geo_info"
+        ]
+      },
+      {
+        "clause_id": "(b)(4)",
+        "clause_text": "Visual depictions of apparent child pornography.— Any visual depiction of apparent child pornography or other content relating to the incident such report is regarding.",
+        "signals": [
+          "include_visual_depications"
+        ]
+      },
+      {
+        "clause_id": "(b)(5)(A)",
+        "clause_text": "any data or information regarding the transmission of the communication;",
+        "signals": [
+          "include_complete_communication"
+        ]
+      },
+      {
+        "clause_id": "(b)(5)(B)",
+        "clause_text": "any visual depictions, data, or other digital files contained in, or attached to, the communication.",
+        "signals": [
+          "include_complete_communication",
+          "include_visual_depications"
+        ]
+      },
+      {
+        "clause_id": "(c)(1)",
+        "clause_text": "Any Federal law enforcement agency that is involved in the investigation of child sexual exploitation, kidnapping, or enticement crimes.",
+        "signals": [
+          "csam_reporting"
+        ]
+      },
+      {
+        "clause_id": "(c)(2)",
+        "clause_text": "Any State or local law enforcement agency that is involved in the investigation of child sexual exploitation.",
+        "signals": [
+          "csam_reporting"
+        ]
+      },
+      {
+        "clause_id": "(c)(3)",
+        "clause_text": "A foreign law enforcement agency designated by the Attorney General under subsection (d)(3) or a foreign law enforcement agency that has an established relationship with the Federal Bureau of Investigation, Immigration and Customs Enforcement, or INTERPOL, and is involved in the investigation of child sexual exploitation, kidnapping, or enticement crimes.",
+        "signals": [
+          "csam_reporting"
+        ]
+      },
+      {
+        "clause_id": "(d)(1)",
+        "clause_text": "The Attorney General shall enforce this section.",
+        "signals": [
+          "csam_reporting"
+        ]
+      },
+      {
+        "clause_id": "(d)(2)",
+        "clause_text": "The Attorney General may designate a Federal law enforcement agency or agencies to which a report shall be forwarded under subsection (c)(1).",
+        "signals": [
+          "csam_reporting"
+        ]
+      },
+      {
+        "clause_id": "(d)(3)(A)",
+        "clause_text": "in consultation with the Secretary of State, designate foreign law enforcement agencies to which a report may be forwarded under subsection (c)(3);",
+        "signals": [
+          "csam_reporting"
+        ]
+      },
+      {
+        "clause_id": "(d)(3)(B)",
+        "clause_text": "establish the conditions under which such a report may be forwarded to such agencies; and",
+        "signals": [
+          "csam_reporting"
+        ]
+      },
+      {
+        "clause_id": "(d)(3)(C)",
+        "clause_text": "develop a process for foreign law enforcement agencies to request assistance from Federal law enforcement agencies in obtaining evidence related to a report referred under subsection (c)(3).",
+        "signals": [
+          "csam_reporting"
+        ]
+      },
+      {
+        "clause_id": "(d)(4)",
+        "clause_text": "The Attorney General may maintain and make available to the Department of State, NCMEC, providers, the Committee on the Judiciary of the Senate, and the Committee on the Judiciary of the House of Representatives a list of the foreign law enforcement agencies designated under paragraph (3).",
+        "signals": [
+          "ncmec_reference"
+        ]
+      },
+      {
+        "clause_id": "(d)(5)(A)(i)",
+        "clause_text": "a provider notifies NCMEC that the provider is making a report under this section as the result of a request by a foreign law enforcement agency; and",
+        "signals": [
+          "ncmec_reference"
+        ]
+      },
+      {
+        "clause_id": "(d)(5)(A)(ii)(I)",
+        "clause_text": "the requesting foreign law enforcement agency; or",
+        "signals": [
+          "csam_reporting"
+        ]
+      },
+      {
+        "clause_id": "(d)(5)(A)(ii)(II)",
+        "clause_text": "another agency in the same country designated by the Attorney General under paragraph (3) or that has an established relationship with the Federal Bureau of Investigation, U.S. Immigration and Customs Enforcement, or INTERPOL and is involved in the investigation of child sexual exploitation, kidnapping, or enticement crimes.",
+        "signals": [
+          "csam_reporting"
+        ]
+      },
+      {
+        "clause_id": "(d)(5)(B)(i)",
+        "clause_text": "the identity of the foreign law enforcement agency to which the report was forwarded; and",
+        "signals": [
+          "csam_reporting"
+        ]
+      },
+      {
+        "clause_id": "(d)(5)(B)(ii)",
+        "clause_text": "the date on which the report was forwarded.",
+        "signals": [
+          "csam_reporting"
+        ]
+      },
+      {
+        "clause_id": "(d)(5)(C)",
+        "clause_text": "If a provider notifies NCMEC that the provider is making a report under this section as the result of a request by a foreign law enforcement agency and NCMEC is unable to forward the report as described in subparagraph (A)(ii), NCMEC shall notify the provider that NCMEC was unable to forward the report.",
+        "signals": [
+          "ncmec_reference"
+        ]
+      },
+      {
+        "clause_id": "(e)(1)",
+        "clause_text": "in the case of an initial knowing and willful failure to make a report, not more than $850,000 in the case of a provider with not less than 100,000,000 monthly active users or $600,000 in the case of a provider with less than 100,000,000 monthly active users; and",
+        "signals": [
+          "penalties_for_non_reporting"
+        ]
+      },
+      {
+        "clause_id": "(e)(2)",
+        "clause_text": "in the case of any second or subsequent knowing and willful failure to make a report, not more than $1,000,000 in the case of a provider with not less than 100,000,000 monthly active users or $850,000 in the case of a provider with less than 100,000,000 monthly active users.",
+        "signals": [
+          "penalties_for_non_reporting"
+        ]
+      },
+      {
+        "clause_id": "(f)(1)",
+        "clause_text": "monitor any user, subscriber, or customer of that provider;",
+        "signals": [
+          "no_proactive_monitoring_required"
+        ]
+      },
+      {
+        "clause_id": "(f)(2)",
+        "clause_text": "monitor the content of any communication of any person described in paragraph (1); or",
+        "signals": [
+          "no_proactive_monitoring_required"
+        ]
+      },
+      {
+        "clause_id": "(f)(3)",
+        "clause_text": "affirmatively search, screen, or scan for facts or circumstances described in sections (a) and (b).",
+        "signals": [
+          "no_proactive_monitoring_required"
+        ]
+      },
+      {
+        "clause_id": "(g)(1)",
+        "clause_text": "Except as provided in paragraph (2), a law enforcement agency that receives a report under subsection (c) shall not disclose any information contained in that report.",
+        "signals": [
+          "csam_reporting"
+        ]
+      },
+      {
+        "clause_id": "(g)(2)(A)(i)",
+        "clause_text": "to an attorney for the government for use in the performance of the official duties of that attorney;",
+        "signals": [
+          "csam_reporting"
+        ]
+      },
+      {
+        "clause_id": "(g)(2)(A)(ii)",
+        "clause_text": "to such officers and employees of that law enforcement agency, as may be necessary in the performance of their investigative and recordkeeping functions;",
+        "signals": [
+          "csam_reporting"
+        ]
+      },
+      {
+        "clause_id": "(g)(2)(A)(iii)",
+        "clause_text": "to such other government personnel (including personnel of a State or subdivision of a State) as are determined to be necessary by an attorney for the government to assist the attorney in the performance of the official duties of the attorney in enforcing Federal criminal law;",
+        "signals": [
+          "csam_reporting"
+        ]
+      },
+      {
+        "clause_id": "(g)(2)(A)(iv)",
+        "clause_text": "if the report discloses a violation of State criminal law, to an appropriate official of a State or subdivision of a State for the purpose of enforcing such State law;",
+        "signals": [
+          "csam_reporting"
+        ]
+      },
+      {
+        "clause_id": "(g)(2)(A)(v)",
+        "clause_text": "to a defendant in a criminal case or the attorney for that defendant, subject to the terms and limitations under section 3509(m) or a similar State law, to the extent the information relates to a criminal charge pending against that defendant;",
+        "signals": [
+          "csam_reporting"
+        ]
+      },
+      {
+        "clause_id": "(g)(2)(A)(vi)",
+        "clause_text": "subject to subparagraph (B), to a provider if necessary to facilitate response to legal process issued in connection to a criminal investigation, prosecution, or post-conviction remedy relating to that report; and",
+        "signals": [
+          "csam_reporting"
+        ]
+      },
+      {
+        "clause_id": "(g)(2)(A)(vii)",
+        "clause_text": "as ordered by a court upon a showing of good cause and pursuant to any protective orders or other conditions that the court may impose.",
+        "signals": [
+          "csam_reporting"
+        ]
+      },
+      {
+        "clause_id": "(g)(2)(B)",
+        "clause_text": "Nothing in subparagraph (A)(vi) authorizes a law enforcement agency to provide visual depictions of apparent child pornography to a provider.",
+        "signals": [
+          "include_visual_depications"
+        ]
+      },
+      {
+        "clause_id": "(g)(3)(A)",
+        "clause_text": "any Federal law enforcement agency designated by the Attorney General under subsection (d)(2) or that is involved in the investigation of child sexual exploitation, kidnapping, or enticement crimes;",
+        "signals": [
+          "csam_reporting"
+        ]
+      },
+      {
+        "clause_id": "(g)(3)(B)",
+        "clause_text": "any State, local, or tribal law enforcement agency involved in the investigation of child sexual exploitation, kidnapping, or enticement crimes;",
+        "signals": [
+          "csam_reporting"
+        ]
+      },
+      {
+        "clause_id": "(g)(3)(C)",
+        "clause_text": "any foreign law enforcement agency designated by the Attorney General under subsection (d)(3) or that has an established relationship with the Federal Bureau of Investigation, Immigration and Customs Enforcement, or INTERPOL, and is involved in the investigation of child sexual exploitation, kidnapping, or enticement crimes;",
+        "signals": [
+          "csam_reporting"
+        ]
+      },
+      {
+        "clause_id": "(g)(3)(D)",
+        "clause_text": "a provider as described in section 2258C; and",
+        "signals": [
+          "csam_reporting"
+        ]
+      },
+      {
+        "clause_id": "(g)(3)(E)",
+        "clause_text": "respond to legal process, as necessary.",
+        "signals": [
+          "csam_reporting"
+        ]
+      },
+      {
+        "clause_id": "(g)(4)",
+        "clause_text": "A provider that submits a report under subsection (a)(1) may disclose by mail, electronic transmission, or other reasonable means, information, including visual depictions contained in the report, in a manner consistent with permitted disclosures under paragraphs (3) through (8) of section 2702(b) only to a law enforcement agency described in subparagraph (A), (B), or (C) of paragraph (3), to NCMEC, or as necessary to respond to legal process.",
+        "signals": [
+          "ncmec_reference",
+          "include_visual_depications",
+          "csam_reporting"
+        ]
+      },
+      {
+        "clause_id": "(h)(1)",
+        "clause_text": "For the purposes of this section, a completed submission by a provider of a report to the CyberTipline under subsection (a)(1) shall be treated as a request to preserve the contents provided in the report for 1 year after the submission to the CyberTipline.",
+        "signals": [
+          "preservation_1y",
+          "cybertipline_reference"
+        ]
+      },
+      {
+        "clause_id": "(h)(2)",
+        "clause_text": "Pursuant to paragraph (1), a provider shall preserve any visual depictions, data, or other digital files that are reasonably accessible and may provide context or additional information about the reported material or person.",
+        "signals": [
+          "preservation_1y",
+          "include_visual_depications",
+          "include_complete_communication"
+        ]
+      },
+      {
+        "clause_id": "(h)(3)",
+        "clause_text": "A provider preserving materials under this section shall maintain the materials in a secure location and take appropriate steps to limit access by agents or employees of the service to the materials to that access necessary to comply with the requirements of this subsection.",
+        "signals": [
+          "preservation_1y"
+        ]
+      },
+      {
+        "clause_id": "(h)(4)",
+        "clause_text": "Nothing in this section shall be construed as replacing, amending, or otherwise interfering with the authorities and duties under section 2703.",
+        "signals": [
+          "preservation_1y"
+        ]
+      },
+      {
+        "clause_id": "(h)(5)",
+        "clause_text": "A provider of a report to the CyberTipline under subsection (a)(1) may voluntarily preserve the contents provided in the report (including any comingled content described in paragraph (2)) for longer than 1 year after the submission to the CyberTipline for the purpose of reducing the proliferation of online child sexual exploitation or preventing the online sexual exploitation of children.",
+        "signals": [
+          "preservation_1y",
+          "include_visual_depications",
+          "include_complete_communication"
+        ]
+      },
+      {
+        "clause_id": "(h)(6)",
+        "clause_text": "Not later than 1 year after the date of enactment of this paragraph, a provider of a report to the CyberTipline under subsection (a)(1) shall preserve materials under this subsection in a manner that is consistent with the most recent version of the Cybersecurity Framework developed by the National Institute of Standards and Technology, or any successor thereto.",
+        "signals": [
+          "preservation_1y"
+        ]
+      }
+    ]
+  }
+]

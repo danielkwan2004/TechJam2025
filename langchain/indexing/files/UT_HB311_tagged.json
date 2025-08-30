@@ -1,0 +1,269 @@
+[
+  {
+    "type": "article",
+    "article_number": "13-63-101",
+    "title": "Definitions.",
+    "clauses": [
+      {
+        "clause_id": "13-63-101(1)",
+        "clause_text": "\"Account holder\" means a person who has, or opens, an account or profile to use a social media company's platform.",
+        "signals": []
+      },
+      {
+        "clause_id": "13-63-101(2)",
+        "clause_text": "\"Addiction\" means use of a social media platform that: (a) indicates the user's substantial preoccupation or obsession with, or the user's substantial difficulty to cease or reduce use of, the social media platform; and (b) causes physical, mental, emotional, developmental, or material harms to the user.",
+        "signals": []
+      },
+      {
+        "clause_id": "13-63-101(3)",
+        "clause_text": "\"Director\" means the director of the Division of Consumer Protection created in Section 13-2-1.",
+        "signals": []
+      },
+      {
+        "clause_id": "13-63-101(4)",
+        "clause_text": "\"Division\" means the Division of Consumer Protection created in Section 13-2-1.",
+        "signals": []
+      },
+      {
+        "clause_id": "13-63-101(5)",
+        "clause_text": "\"Educational entity\" means a public school, an LEA, a charter school, the Utah Schools for the Deaf and Blind, a private school, a denominational school, a parochial school, a community college, a state college, a state university, or a nonprofit private postsecondary educational institution.",
+        "signals": []
+      },
+      {
+        "clause_id": "13-63-101(6)",
+        "clause_text": "\"Interactive computer service\" means an information service, information system, or information access software provider that: (a) provides or enables computer access by multiple users to a computer server; and (b) provides access to the Internet.",
+        "signals": []
+      },
+      {
+        "clause_id": "13-63-101(6)(b)(i)",
+        "clause_text": "Includes a web service.",
+        "signals": []
+      },
+      {
+        "clause_id": "13-63-101(6)(b)(ii)",
+        "clause_text": "Includes a web system.",
+        "signals": []
+      },
+      {
+        "clause_id": "13-63-101(6)(b)(iii)",
+        "clause_text": "Includes a website.",
+        "signals": []
+      },
+      {
+        "clause_id": "13-63-101(6)(b)(iv)",
+        "clause_text": "Includes a web application.",
+        "signals": []
+      },
+      {
+        "clause_id": "13-63-101(6)(b)(v)",
+        "clause_text": "Includes a web portal.",
+        "signals": []
+      },
+      {
+        "clause_id": "13-63-101(7)",
+        "clause_text": "\"Minor\" means an individual who is under the age of 18 and: (a) has not been emancipated as that term is defined in Section 80-7-102; or (b) has not been married.",
+        "signals": []
+      },
+      {
+        "clause_id": "13-63-101(8)",
+        "clause_text": "\"Post\" means content that an account holder makes available on a social media platform for other account holders or users to view.",
+        "signals": []
+      },
+      {
+        "clause_id": "13-63-101(9)",
+        "clause_text": "\"Social media company\" means a person or entity that: (a) provides a social media platform that has at least 5,000,000 account holders worldwide; and (b) is an interactive computer service.",
+        "signals": []
+      },
+      {
+        "clause_id": "13-63-101(10)(a)",
+        "clause_text": "\"Social media platform\" means an online forum that a social media company makes available for an account holder to: (i) create a profile; (ii) upload posts; (iii) view the posts of other account holders; and (iv) interact with other account holders or users.",
+        "signals": []
+      },
+      {
+        "clause_id": "13-63-101(10)(b)",
+        "clause_text": "\"Social media platform\" does not include an online service, website, or application:",
+        "signals": []
+      },
+      {
+        "clause_id": "13-63-101(10)(b)(i)",
+        "clause_text": "Where the predominant or exclusive function is: (A) electronic mail; (B) direct messaging consisting of text, photos, or videos that are sent between devices by electronic means, where messages are: (I) shared between the sender and the recipient; (II) only visible to the sender and the recipient; and (III) not posted publicly; (C) a streaming service that: (I) provides only licensed media in a continuous flow from the service, website, or application to the end user; and (II) does not obtain a license to the media from a user or account holder by agreement to its terms of service; (D) news, sports, entertainment, or other content that is preselected by the provider and not user generated, and any chat, comment, or interactive functionality that is provided incidental to, directly related to, or dependent upon provision of the content; (E) online shopping or e-commerce, if the interaction with other users or account holders is generally limited to: (I) the ability to upload a post and comment on reviews; (II) the ability to display lists or collections of goods for sale or wish lists; and (III) other functions that are focused on online shopping or e-commerce rather than interaction between users or account holders; (F) interactive gaming, virtual gaming, or an online service, that allows the creation and uploading of content for the purpose of interactive gaming, edutainment, or associated entertainment, and the communication related to that content; (G) photo editing that has an associated photo hosting service, if the interaction with other users or account holders is generally limited to liking or commenting; (H) a professional creative network for showcasing and discovering artistic content, if the content is required to be non-pornographic; (I) single-purpose community groups for public safety if: (I) the interaction with other users or account holders is generally limited to that single purpose; and (II) the community group has guidelines or policies against illegal content; (J) providing career development opportunities, including professional networking, job skills, learning certifications, and job posting and application services; (K) business to business software; (L) a teleconferencing or videoconferencing service that allows reception and transmission of audio and video signals for real time communication; (M) cloud storage; (N) shared document collaboration; (O) cloud computing services, which may include cloud storage and shared document collaboration; (P) providing access to or interacting with data visualization platforms, libraries, or hubs; (Q) to permit comments on a digital news website, if the news content is posted only by the provider of the digital news website; (R) providing or obtaining technical support for a platform, product, or service; (S) academic or scholarly research; or (T) genealogical research.",
+        "signals": []
+      },
+      {
+        "clause_id": "13-63-101(10)(b)(ii)",
+        "clause_text": "Where: (A) the majority of the content that is posted or created is posted or created by the provider of the online service, website, or application; and (B) the ability to chat, comment, or interact with other users is directly related to the provider's content.",
+        "signals": []
+      },
+      {
+        "clause_id": "13-63-101(10)(b)(iii)",
+        "clause_text": "That is a classified ad service that only permits the sale of goods and prohibits the solicitation of personal services.",
+        "signals": []
+      },
+      {
+        "clause_id": "13-63-101(10)(b)(iv)",
+        "clause_text": "That is used by and under the direction of an educational entity, including: (A) a learning management system; (B) a student engagement program; and (C) a subject or skill-specific program.",
+        "signals": []
+      },
+      {
+        "clause_id": "13-63-101(11)",
+        "clause_text": "\"User\" means a person who has access to view all, or some of, the posts on a social media platform, but is not an account holder.",
+        "signals": []
+      },
+      {
+        "clause_id": "13-63-101(12)(a)",
+        "clause_text": "\"Utah account holder\" means a person who is a Utah resident and an account holder.",
+        "signals": []
+      },
+      {
+        "clause_id": "13-63-101(12)(b)",
+        "clause_text": "\"Utah account holder\" includes a Utah minor account holder.",
+        "signals": []
+      },
+      {
+        "clause_id": "13-63-101(13)",
+        "clause_text": "\"Utah minor account holder\" means a Utah account holder who is a minor.",
+        "signals": []
+      },
+      {
+        "clause_id": "13-63-101(14)",
+        "clause_text": "\"Utah resident\" means an individual who currently resides in Utah.",
+        "signals": []
+      }
+    ]
+  },
+  {
+    "type": "article",
+    "article_number": "13-63-201",
+    "title": "Social media platform design regulations — Enforcement and auditing authority — Penalties.",
+    "clauses": [
+      {
+        "clause_id": "13-63-201(1)",
+        "clause_text": "Beginning March 1, 2024: (a) the division shall administer and enforce the provisions of this section; and (b) the division may audit the records of a social media company in order to determine compliance with the requirements of this section or to investigate a complaint, including a random sample of a social media company's records and other audit methods.",
+        "signals": []
+      },
+      {
+        "clause_id": "13-63-201(2)",
+        "clause_text": "Beginning March 1, 2024, a social media company shall not use a practice, design, or feature on the company's social media platform that the social media company knows, or which by the exercise of reasonable care should know, causes a Utah minor account holder to have an addiction to the social media platform.",
+        "signals": ["ban_addictive_features"]
+      },
+      {
+        "clause_id": "13-63-201(3)(a)",
+        "clause_text": "Beginning March 1, 2024, subject to Subsection (3)(b), a social media company is subject to: (i) a civil penalty of $250,000 for each practice, design, or feature shown to have caused addiction; and (ii) a civil penalty of up to $2,500 for each Utah minor account holder who is shown to have been exposed to the practice, design, or feature found to have caused addiction under Subsection (3)(a)(i).",
+        "signals": ["statutor"]
+      },
+      {
+        "clause_id": "13-63-201(3)(b)",
+        "clause_text": "A social media company shall not be subject to a civil penalty for violating this section if the social media company, as an affirmative defense, demonstrates that the social media company: (i) instituted and maintained a program of at least quarterly audits of the social media company's practices, designs, and features to detect practices, designs, or features that have the potential to cause or contribute to the addiction of a minor user; and (ii) corrected, within 30 days of the completion of an audit, any practice, design, or feature discovered by the audit to present more than a de minimus risk of violating this section.",
+        "signals": ["quarterly_audits_required"]
+      },
+      {
+        "clause_id": "13-63-201(3)(c)",
+        "clause_text": "In a court action by the division to enforce this section, the court may, in addition to a civil penalty: (i) declare that the act or practice violates a provision of this section; (ii) issue an injunction for a violation of this section; (iii) award actual damages to an injured purchaser or consumer; and (iv) award any other relief that the court deems reasonable and necessary.",
+        "signals": ["statutor"]
+      },
+      {
+        "clause_id": "13-63-201(4)",
+        "clause_text": "Nothing in this section may be construed to impose liability for a social media company for: (a) content that is generated by an account holder, or uploaded to or shared on the platform by an account holder, that may be encountered by another account holder; (b) passively displaying content that is created entirely by a third party; (c) information or content for which the social media company was not, in whole or in part, responsible for creating or developing; or (d) any conduct by a social media company involving a Utah minor account holder who would otherwise be protected by federal or Utah law.",
+        "signals": []
+      },
+      {
+        "clause_id": "13-63-201(5)",
+        "clause_text": "If a court of competent jurisdiction grants judgment or injunctive relief to the division, the court shall award the division: (a) reasonable attorney fees; (b) court costs; and (c) investigative fees.",
+        "signals": ["statutor"]
+      },
+      {
+        "clause_id": "13-63-201(6)",
+        "clause_text": "Nothing in this section may be construed to negate or limit a cause of action that may have existed or exists against a social media company under the law as it existed before the effective date of this section.",
+        "signals": []
+      },
+      {
+        "clause_id": "13-63-201(7)",
+        "clause_text": "All money received for the payment of a fine or civil penalty imposed under this section shall be deposited into the Consumer Protection Education and Training Fund established in Section 13-2-8.",
+        "signals": ["statutor"]
+      }
+    ]
+  },
+  {
+    "type": "article",
+    "article_number": "13-63-301",
+    "title": "Private right of action for harm to a minor — Rebuttable presumption of harm and causation.",
+    "clauses": [
+      {
+        "clause_id": "13-63-301(1)",
+        "clause_text": "Beginning March 1, 2024, a person may bring an action under this section against a social media company to recover damages incurred after March 1, 2024 by a Utah minor account holder for any addiction, financial, physical, or emotional harm suffered as a consequence of using or having an account on the social media company's social media platform.",
+        "signals": ["private_right_of_action"]
+      },
+      {
+        "clause_id": "13-63-301(2)",
+        "clause_text": "A suit filed under the authority of this section shall be filed in the district court for the district in which the Utah minor account holder resides.",
+        "signals": ["private_right_of_action"]
+      },
+      {
+        "clause_id": "13-63-301(3)",
+        "clause_text": "Notwithstanding Subsection (4), if a court finds that a Utah minor account holder has been harmed as a consequence of using or having an account on the social media company's social media platform, the minor seeking relief under this section is entitled to: (a) an award of reasonable attorney fees and court costs; and (b) an amount equal to the greater of: (i) $2,500 per each incident of harm; or (ii) actual damages for addiction, financial, physical, and emotional harm incurred by the person bringing the action, if the court determines that the harm is a direct consequence of the violation or violations.",
+        "signals": ["private_right_of_action"]
+      },
+      {
+        "clause_id": "13-63-301(4)",
+        "clause_text": "If a Utah minor account holder seeking recovery of damages under this section is under the age of 16, there shall be a rebuttable presumption that the harm actually occurred and that the harm was caused as a consequence of using or having an account on the social media company's social media platform.",
+        "signals": ["private_right_of_action"]
+      }
+    ]
+  },
+  {
+    "type": "article",
+    "article_number": "13-63-401",
+    "title": "Waiver prohibited.",
+    "clauses": [
+      {
+        "clause_id": "13-63-401(1)",
+        "clause_text": "A protection or requirement provided under this chapter may not be waived or limited; any waiver or limitation is void as unlawful, against public policy, and not enforceable.",
+        "signals": []
+      },
+      {
+        "clause_id": "13-63-401(2)",
+        "clause_text": "The right to cooperate with the division or to file a complaint with the division may not be waived or limited.",
+        "signals": []
+      },
+      {
+        "clause_id": "13-63-401(3)",
+        "clause_text": "The right to a private right of action as provided under this chapter may not be waived or limited.",
+        "signals": ["private_right_of_action"]
+      },
+      {
+        "clause_id": "13-63-401(4)",
+        "clause_text": "The right to recover actual damages, statutory damages, civil penalties, costs, or fees as allowed by this chapter may not be waived or limited.",
+        "signals": ["statutor"]
+      }
+    ]
+  },
+  {
+    "type": "article",
+    "article_number": "13-63-501",
+    "title": "Severability.",
+    "clauses": [
+      {
+        "clause_id": "13-63-501",
+        "clause_text": "If any provision of this chapter or the application of any provision to any person or circumstance is held invalid by a final decision of a court of competent jurisdiction, the remainder of this chapter shall be given effect without the invalid provision or application. The provisions of this chapter are severable.",
+        "signals": []
+      }
+    ]
+  },
+  {
+    "type": "article",
+    "article_number": "Act-8",
+    "title": "Effective date.",
+    "clauses": [
+      {
+        "clause_id": "Act-8(1)",
+        "clause_text": "Except as provided in Subsection (2), this bill takes effect on May 3, 2023.",
+        "signals": []
+      },
+      {
+        "clause_id": "Act-8(2)",
+        "clause_text": "The actions affecting Section 13-2-1 (Effective 12/31/2023) take effect on December 31, 2023.",
+        "signals": []
+      }
+    ]
+  }
+]

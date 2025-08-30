@@ -1,0 +1,262 @@
+[
+  {
+    "type": "recital",
+    "article_number": "R",
+    "recital_number": "DIGEST",
+    "title": "Legislative Counsel's Digest",
+    "clauses": [
+      {
+        "clause_id": "R-DIGEST",
+        "clause_text": "SB 976, Skinner. Protecting Our Kids from Social Media Addiction Act. Existing law, the California Age-Appropriate Design Code Act, requires, beginning July 1, 2024, a business that provides an online service, product, or feature likely to be accessed by children to comply with certain requirements. The act requires the business to complete a data protection impact assessment addressing, among other things, whether the design could harm children and whether and how the online product, service, or feature uses system design features to increase, sustain, or extend use of the online product, service, or feature by children, including the automatic playing of media, rewards for time spent, and notifications. Existing law prohibits the business from using the personal information of any child in a way that the business knows, or has reason to know, is materially detrimental to the physical health, mental health, or well-being of a child. Existing law, the Privacy Rights for California Minors in the Digital World, prohibits an operator of an internet website, online service, online application, or mobile application from specified conduct when minors are involved, including the marketing or advertising of alcoholic beverages, firearms, or certain other products or services. Existing law sets forth other related protections for minors, including under the California Consumer Privacy Act of 2018 and the California Privacy Rights Act of 2020. This bill, the Protecting Our Kids from Social Media Addiction Act, would make it unlawful for the operator of an addictive internet-based service or application, as defined, to provide an addictive feed to a user, unless the operator does not have actual knowledge that the user is a minor; commencing January 1, 2027, has reasonably determined that the user is not a minor; or has obtained verifiable parental consent to provide an addictive feed to the user who is a minor. The bill would define “addictive feed” as an internet website, online service, online application, or mobile application, in which multiple pieces of media generated or shared by users are recommended, selected, or prioritized for display to a user based on information provided by the user, or otherwise associated with the user or the user’s device, as specified, unless any of certain conditions are met. The bill would make it unlawful for the operator of an addictive internet-based service or application, between the hours of 12 a.m. and 6 a.m., in the user’s local time zone, and between the hours of 8 a.m. and 3 p.m., Monday through Friday from September through May in the user’s local time zone, to send notifications to a user if the operator has actual knowledge that the user is a minor or, commencing January 1, 2027, has not reasonably determined that the user is not a minor, unless the operator has obtained verifiable parental consent to send those notifications, as specified. The bill would set forth related provisions for certain access controls determined by the verified parent through a mechanism provided by the operator. Under the bill, a parent’s provision of consent or use of a mechanism, as described above, would not waive, release, otherwise limit, or serve as a defense to, any claim that the parent, or that the user who is a minor or was a minor at the time of using the internet-based service or application, might have against the operator regarding any harm to the mental health or well-being of the user. The bill would require an operator to annually disclose the number of minor users of its addictive internet-based service or application, and of that total the number for whom the operator has received verifiable parental consent to provide an addictive feed, and the number of minor users as to whom the access controls are or are not enabled. Under the bill, these provisions would only be enforced in a civil action brought in the name of the people of the State of California by the Attorney General. The bill would require the Attorney General to adopt regulations to further the purposes of these provisions, including regulations regarding age assurance and parental consent by January 1, 2027. The bill would authorize the Attorney General to adopt regulations that provide for exceptions to these provisions, but only if those exceptions further the purpose of protecting minors. The bill would require the Attorney General, in promulgating regulations, to solicit public comment regarding the impact that any regulation might have based on certain nondiscrimination characteristics set forth in existing law. The bill would make these provisions severable. Digest Key Vote: MAJORITY Appropriation: NO Fiscal Committee: YES Local Program: NO",
+        "signals": [
+          "addictive_feed_restriction",
+          "parental_consent_required",
+          "restricted_notification_hours",
+          "annual_minor_user_disclosure"
+        ]
+      }
+    ]
+  },
+  {
+    "type": "article",
+    "article_number": "1",
+    "title": "Findings and declarations (SEC. 1)",
+    "clauses": [
+      {
+        "clause_id": "1(a)",
+        "clause_text": "Social media provides an important tool for communication and information sharing. Approximately 95 percent of 13- to 17-year-olds, inclusive, say that they use at least one social media platform, and more than one-third report using social media almost constantly.",
+        "signals": []
+      },
+      {
+        "clause_id": "1(b)",
+        "clause_text": "However, some social media platforms have evolved to include addictive features, including the algorithmic delivery of content and other design features, that pose a significant risk of harm to the mental health and well-being of children and adolescents.",
+        "signals": []
+      },
+      {
+        "clause_id": "1(c)",
+        "clause_text": "As the United States Surgeon General has reported, recent evidence has identified “reasons for concern” about social media usage by children and adolescents. This evidence includes a study concluding that the risk of poor mental health outcomes doubles for children and adolescents who use social media at least three hours a day and research finding that social media usage is linked to a variety of negative health outcomes, including low self-esteem and disordered eating, for adolescent girls.",
+        "signals": []
+      },
+      {
+        "clause_id": "1(d)",
+        "clause_text": "Heavier usage of social media also leads to less healthy sleep patterns and sleep quality, which can in turn exacerbate both physical and mental health problems.",
+        "signals": []
+      },
+      {
+        "clause_id": "1(e)",
+        "clause_text": "Further, social media usage is more strongly associated with negative mental health outcomes, including depressive symptoms and self-harm behaviors, than is consumption of other forms of media such as television or electronic games.",
+        "signals": []
+      },
+      {
+        "clause_id": "1(f)",
+        "clause_text": "Both California and the country as a whole are facing an ongoing youth mental health crisis, with rates of adolescent suicides, depressive episodes, and feelings of sadness and hopelessness on the rise in recent years.",
+        "signals": []
+      },
+      {
+        "clause_id": "1(g)",
+        "clause_text": "For these reasons, it is essential that California act to ensure that social media platforms obtain parental consent before exposing children and adolescents to harmful and addictive social media features.",
+        "signals": ["parental_consent_required"]
+      }
+    ]
+  },
+  {
+    "type": "article",
+    "article_number": "27000",
+    "title": "Section 27000",
+    "clauses": [
+      {
+        "clause_id": "27000",
+        "clause_text": "This chapter shall be known, and may be cited, as the Protecting Our Kids from Social Media Addiction Act.",
+        "signals": []
+      }
+    ]
+  },
+  {
+    "type": "article",
+    "article_number": "27000.5",
+    "title": "Section 27000.5",
+    "clauses": [
+      {
+        "clause_id": "27000.5",
+        "clause_text": "For purposes of this chapter, the following terms have the following meanings:",
+        "signals": []
+      },
+      {
+        "clause_id": "27000.5(a)",
+        "clause_text": "“Addictive feed” means an internet website, online service, online application, or mobile application, or a portion thereof, in which multiple pieces of media generated or shared by users are, either concurrently or sequentially, recommended, selected, or prioritized for display to a user based, in whole or in part, on information provided by the user, or otherwise associated with the user or the user’s device, unless any of the following conditions are met, alone or in combination with one another: (1) The information is not persistently associated with the user or user’s device, and does not concern the user’s previous interactions with media generated or shared by others. (2) The information consists of search terms that are not persistently associated with the user or user’s device. (3) The information consists of user-selected privacy or accessibility settings, technical information concerning the user’s device, or device communications or signals concerning whether the user is a minor. (4) The user expressly and unambiguously requested the specific media or media by the author, creator, or poster of the media, or the blocking, prioritization, or deprioritization of such media, provided that the media is not recommended, selected, or prioritized for display based, in whole or in part, on other information associated with the user or the user’s device, except as otherwise permitted by this chapter and, in the case of audio or video content, is not automatically played. (5) The media consists of direct, private communications between users. (6) The media recommended, selected, or prioritized for display is exclusively the next media in a preexisting sequence from the same author, creator, poster, or source and, in the case of audio or video content, is not automatically played. (7) The recommendation, selection, or prioritization of the media is necessary to comply with this chapter or any regulations promulgated pursuant to this chapter.",
+        "signals": ["addictive_feed_restriction"]
+      },
+      {
+        "clause_id": "27000.5(b)",
+        "clause_text": "(1) “Addictive internet-based service or application” means an internet website, online service, online application, or mobile application, including, but not limited to, a “social media platform” as defined in Section 22675 of the Business and Professions Code, that offers users or provides users with an addictive feed as a significant part of the service provided by that internet website, online service, online application, or mobile application. (2) “Addictive internet-based service or application” does not apply to either of the following:",
+        "signals": ["addictive_feed_restriction"]
+      },
+      {
+        "clause_id": "27000.5(A)",
+        "clause_text": "An internet website, online service, online application, or mobile application for which interactions between users are limited to commercial transactions or to consumer reviews of products, sellers, services, events, or places, or any combination thereof.",
+        "signals": ["addictive_feed_restriction"]
+      },
+      {
+        "clause_id": "27000.5(B)",
+        "clause_text": "An internet website, online service, online application, or mobile application that operates a feed for the primary purpose of cloud storage.",
+        "signals": ["addictive_feed_restriction"]
+      },
+      {
+        "clause_id": "27000.5(c)",
+        "clause_text": "“Media” means text, audio, an image, or a video.",
+        "signals": []
+      },
+      {
+        "clause_id": "27000.5(d)",
+        "clause_text": "“Minor” means an individual under 18 years of age who is located in the State of California.",
+        "signals": []
+      },
+      {
+        "clause_id": "27000.5(e)",
+        "clause_text": "“Operator” means a person who operates or provides an internet website, an online service, an online application, or a mobile application.",
+        "signals": []
+      },
+      {
+        "clause_id": "27000.5(f)",
+        "clause_text": "“Parent” means a parent or guardian, including as defined in regulations promulgated pursuant to this chapter.",
+        "signals": []
+      },
+      {
+        "clause_id": "27000.5(g)",
+        "clause_text": "“User” means a person who uses an internet website, online service, online application, or mobile application. “User” does not include the operator or a person acting as an agent of the operator.",
+        "signals": []
+      }
+    ]
+  },
+  {
+    "type": "article",
+    "article_number": "27001",
+    "title": "Section 27001",
+    "clauses": [
+      {
+        "clause_id": "27001",
+        "clause_text": "(a) It shall be unlawful for the operator of an addictive internet-based service or application to provide an addictive feed to a user unless either of the following is met: (1) (A) Except as provided in subparagraph (B), the operator does not have actual knowledge that the user is a minor.",
+        "signals": ["addictive_feed_restriction", "parental_consent_required"]
+      },
+      {
+        "clause_id": "27001(B)",
+        "clause_text": "Commencing January 1, 2027, the operator has reasonably determined that the user is not a minor, including pursuant to regulations promulgated by the Attorney General. (2) The operator has obtained verifiable parental consent to provide an addictive feed to the user who is a minor.",
+        "signals": ["addictive_feed_restriction", "parental_consent_required"]
+      },
+      {
+        "clause_id": "27001(b)",
+        "clause_text": "Information collected for the purpose of determining a user’s age or verifying parental consent pursuant to this chapter shall not be used for any purpose other than compliance with this chapter or with another applicable law. The information collected shall be deleted immediately after it is used to determine a user’s age or to verify parental consent, except as necessary to comply with state or federal law.",
+        "signals": ["parental_consent_required"]
+      }
+    ]
+  },
+  {
+    "type": "article",
+    "article_number": "27002",
+    "title": "Section 27002",
+    "clauses": [
+      {
+        "clause_id": "27002",
+        "clause_text": "(a) (1) Except as provided in paragraph (2), it shall be unlawful for the operator of an addictive internet-based service or application, between the hours of 12 a.m. and 6 a.m., in the user’s local time zone, and between the hours of 8 a.m. and 3 p.m., from Monday through Friday from September through May in the user’s local time zone, to send notifications to a user if the operator has actual knowledge that the user is a minor unless the operator has obtained verifiable parental consent to send those notifications. (2) Commencing January 1, 2027, it shall be unlawful for the operator of an addictive internet-based service or application, between the hours of 12 a.m. and 6 a.m., in the user’s local time zone, and between the hours of 8 a.m. and 3 p.m., from Monday through Friday from September through May in the user’s local time zone, to send notifications to a user whom the operator has not reasonably determined is not a minor, including pursuant to regulations promulgated by the Attorney General, unless the operator has obtained verifiable parental consent to send those notifications.",
+        "signals": [
+          "restricted_notification_hours",
+          "parental_consent_required"
+        ]
+      },
+      {
+        "clause_id": "27002(b)",
+        "clause_text": "The operator of an addictive internet-based service or application shall provide a mechanism through which the verified parent of a user who is a minor may do any of the following: (1) Prevent their child from accessing or receiving notifications from the addictive internet-based service or application between specific hours chosen by the parent. This setting shall be set by the operator as on by default, in a manner in which the child’s access is limited between the hours of 12 a.m. and 6 a.m., in the user’s local time zone. (2) Limit their child’s access to any addictive feed from the addictive internet-based service or application to a length of time per day specified by the verified parent. This setting shall be set by the operator as on by default, in a manner in which the child’s access is limited to one hour per day unless modified by the verified parent. (3) Limit their child’s ability to view the number of likes or other forms of feedback to pieces of media within an addictive feed. This setting shall be set by the operator as on by default. (4) Require that the default feed provided to the child when entering the internet-based service or application be one in which pieces of media are not recommended, selected, or prioritized for display based on information provided by the user, or otherwise associated with the user or the user’s device, other than the user’s age or status as a minor. (5) Set their child’s account to private mode, in a manner in which only users to whom the child is connected on the addictive internet-based service or application may view or respond to content posted by the child. This setting shall be set by the operator as on by default.",
+        "signals": [
+          "restricted_notification_hours",
+          "addictive_feed_restriction",
+          "default_private_accounts"
+        ]
+      }
+    ]
+  },
+  {
+    "type": "article",
+    "article_number": "27003",
+    "title": "Section 27003",
+    "clauses": [
+      {
+        "clause_id": "27003",
+        "clause_text": "(a) This chapter shall not be construed as requiring the operator of an addictive internet-based service or application to give a parent any additional or special access to, or control over, the data or accounts of their child.",
+        "signals": []
+      },
+      {
+        "clause_id": "27003(b)",
+        "clause_text": "This chapter shall not be construed as preventing any action taken in good faith to restrict access to, or availability of, media.",
+        "signals": []
+      }
+    ]
+  },
+  {
+    "type": "article",
+    "article_number": "27004",
+    "title": "Section 27004",
+    "clauses": [
+      {
+        "clause_id": "27004",
+        "clause_text": "(a) An operator may choose not to provide services to minors. However, the operator of an addictive internet-based service or application shall not withhold, degrade, lower the quality of, or increase the price of, any product, service, or feature, other than as required by this chapter, due to a user or parent availing themselves of the rights provided by this chapter, or due to the protections required by this chapter.",
+        "signals": []
+      },
+      {
+        "clause_id": "27004(b)",
+        "clause_text": "A parent’s provision of consent as described in Section 27001 or 27002, or the use by a parent of a mechanism as described in Section 27002, does not waive, release, otherwise limit, or serve as a defense to, any claim that the parent, or that the user who is a minor or was a minor at the time of using the internet-based service or application, might have against the operator of an addictive internet-based service or application regarding any harm to the mental health or well-being of the user.",
+        "signals": []
+      },
+      {
+        "clause_id": "27004(c)",
+        "clause_text": "The protections provided by this chapter are in addition to those provided by any other applicable law, including, but not limited to, the California Age-Appropriate Design Code Act (Title 1.81.47 (commencing with Section 1798.99.28) of Part 4 of Division 3 of the Civil Code).",
+        "signals": []
+      }
+    ]
+  },
+  {
+    "type": "article",
+    "article_number": "27005",
+    "title": "Section 27005",
+    "clauses": [
+      {
+        "clause_id": "27005",
+        "clause_text": "An operator of an addictive internet-based service or application shall publicly disclose, on an annual basis, the number of minor users of its addictive internet-based service or application, and of that total the number for whom the operator has received verifiable parental consent to provide an addictive feed, and the number of minor users as to whom the controls set forth in Section 27002 are or are not enabled.",
+        "signals": ["annual_minor_user_disclosure"]
+      }
+    ]
+  },
+  {
+    "type": "article",
+    "article_number": "27006",
+    "title": "Section 27006",
+    "clauses": [
+      {
+        "clause_id": "27006",
+        "clause_text": "(a) This chapter may only be enforced in a civil action brought in the name of the people of the State of California by the Attorney General.",
+        "signals": []
+      },
+      {
+        "clause_id": "27006(b)",
+        "clause_text": "The Attorney General shall adopt regulations to further the purposes of this chapter, including regulations regarding age assurance and parental consent by January 1, 2027. The Attorney General may adopt regulations that provide for exceptions to this chapter, but only if those exceptions further the purpose of protecting minors.",
+        "signals": ["parental_consent_required"]
+      },
+      {
+        "clause_id": "27006(c)",
+        "clause_text": "In promulgating the regulations described in subdivision (b), the Attorney General shall solicit public comment regarding the impact that any regulation might have based on the nondiscrimination characteristics set forth in Section 51 of the Civil Code or in any other applicable law.",
+        "signals": []
+      }
+    ]
+  },
+  {
+    "type": "article",
+    "article_number": "27007",
+    "title": "Section 27007",
+    "clauses": [
+      {
+        "clause_id": "27007",
+        "clause_text": "If any provision of this chapter, or application thereof, to any person or circumstance is held invalid, that invalidity shall not affect other provisions or applications of this chapter that can be given effect without the invalid provision or application, and to this end the provisions of this chapter are declared to be severable.",
+        "signals": []
+      }
+    ]
+  }
+]
