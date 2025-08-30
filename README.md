@@ -39,10 +39,6 @@ pip install -r requirements.txt
 Copy `.env.example` → `.env` and set:
 ```bash
 OPENAI_API_KEY=yourKeyHere
-LANGCHAIN_TRACING_V2=true
-LANGSMITH_PROJECT=techjam2025
-LANGCHAIN_ENDPOINT=https://api.smith.langchain.com
-LANGSMITH_API_KEY=yourKeyHere
 GOOGLE_API_KEY=yourKeyHere
 ```
 
