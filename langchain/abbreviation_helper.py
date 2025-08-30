@@ -12,6 +12,17 @@ supabase: Client = create_client(url, key)
 
 default_doc = "Hello World."
 
+
+def retrieve_all_abbreviations():
+    abbreviations = (
+        supabase.table("abbreviations")
+        .select("*")
+        .execute()
+    ).data
+
+    return abbreviations
+
+
 def retrieve_abbreviations(doc=default_doc):
     abbreviations = (
         supabase.table("abbreviations")
@@ -26,6 +37,7 @@ def retrieve_abbreviations(doc=default_doc):
 
     return out
 
+
 def add_abbreviation(term: str, explanation: str):
     response = (
         supabase.table("abbreviations")
@@ -33,6 +45,8 @@ def add_abbreviation(term: str, explanation: str):
         .execute()
     )
 
+
 if __name__ == '__main__':
-    abbr = retrieve_abbreviations('Introduce limits on video uploads from new accounts. IMT will trigger thresholds based on BB patterns. These limitations are partly for platform safety but without direct legal mapping.')
+    abbr = retrieve_abbreviations(
+        'Introduce limits on video uploads from new accounts. IMT will trigger thresholds based on BB patterns. These limitations are partly for platform safety but without direct legal mapping.')
     print(abbr)
