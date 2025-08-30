@@ -3,7 +3,6 @@ import json
 from dotenv import load_dotenv
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_openai import ChatOpenAI
-
 from abbreviation_helper import retrieve_abbreviations
 
 load_dotenv()
@@ -24,9 +23,7 @@ def extract_hints():
 
 def extract_signals(doc):
     abbreviations = retrieve_abbreviations(doc)
-    formatted_abbrevs = ""
-    for abbr in abbreviations:
-        formatted_abbrevs += F"{abbr['term']} : {abbr['explanation']} \n"
+    formatted_abbrevs = json.dumps(abbreviations + [{ 'term': 'PRD', 'explanation': 'Project Requirement Document'}])
 
     hints = extract_hints()
 
@@ -35,45 +32,59 @@ def extract_signals(doc):
         (
             "system",
             "You are a precise compliance signal extraction assistant."
-            "Your job is to analyse a Product Requirement Document and output potential compliance issues"
+            "Your job is to analyse a Product Requirement Document (PRD) and output potential compliance issues"
             "Use the law hints provided to detect signals."
-            "When you see an abbreviation, resolve it using one from the abbreviations list."
+            "When you see an abbreviation in the PRD, look it up exactly in the abbreviations list provided below. "
+            "If an abbreviation cannot be found, return an error stating what is missing and no signals."
+            "If no signals are found, return error as null.\n"
         ),
         (
             "system",
-            "Here is the list of abbreviations (format: TERM : EXPLANATION ):\n{abbreviations}"
+            "Here is the list of abbreviations as a JSON with keys 'term' and 'explanation':\n{abbreviations}\n"
         ),
         (
             "system",
-            "Law hints (each law contains triggers and reason templates, and each \n{hints}"
+            "Law hints (each law contains triggers and reason templates, and each trigger contains the signal names) \n{hints}\n"
         ),
         (
             "system",
             "Output instructions:\n"
-            "- For each detected signal, include 'signal' and 'reason'. "
+            "- For each detected signal, include 'signal' and 'reason'.\n"
             #"- Consolidate detected signals into signals listed under 'triggers'. "
             #"- Consolidate the reasons using one of the law's 'reason_templates', filling in the signal and referencing context from the document. "
             #"- Apply 'negations' to avoid false positives. "
             #"- If a law requires multiple signals ('must_all') or any of several ('must_any'), only flag the law if conditions are met. "
-            "- If no signals are found, output a list with one object with 'signal': null and a 'reason' explaining why.\n"
-            "- Output all the signals detected as a list with each object containing 'signal' and 'reason'."
+            "- Output all the signals detected as a list with each object containing 'signal' and 'reason'.\n"
+            "- Output format is a JSON with 'error' and 'data'. 'data' is a list of objects with 'signal' and 'reason'.\n"
         ),
         (
             "human",
-            "The PRD:{document}"
+            "The PRD:\n{document}\n"
         )
     ])
 
     chain = prompt | llm
+
+    formatted_messages = prompt.format_messages(
+        abbreviations=formatted_abbrevs,
+        hints=hints,
+        document=doc,
+    )
+
+    print("==== Rendered Prompt ====")
+    for msg in formatted_messages:
+        print(f"[{msg.type.upper()}]: {msg.content}")
+
     response = chain.invoke({
         "document": doc,
         "abbreviations": formatted_abbrevs,
         "hints": json.dumps(hints),
     })
 
-    return response.content
+    return response.content.lstrip('```json\n').rstrip('\n```')
 
 if __name__ == '__main__':
-    userInput = "Introduce limits on video uploads from new accounts. IMT will trigger thresholds based on BB patterns. These limitations are partly for platform safety but without direct legal mapping. "
-    print(extract_signals(userInput))
-    #print(extract_hints())
+    userInput = "Introduce a creator leaderboard updated weekly using internal analytics. Points and rankings are stored in FR metadata and tracked using IMT."
+    output = extract_signals(userInput)
+    print("==== Output ====")
+    print(output)
