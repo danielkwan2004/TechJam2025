@@ -2,6 +2,7 @@ import os
 import json
 from typing import List, Dict
 import re
+import string
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -89,15 +90,28 @@ def retrieve_all_abbreviations(doc: str = default_doc) -> List[Dict[str, str]]:
     """Return merged (defaults + persisted)."""
     return _merge_defaults_and_persisted()
 
+_punct_trans = str.maketrans({p: " " for p in string.punctuation})
 
-def retrieve_abbreviations(doc: str = default_doc) -> List[Dict[str, str]]:
-    """Return abbreviations that appear (substring) in the doc."""
+def _normalize(text: str) -> str:
+    """Lowercase and strip punctuation."""
+    if not text:
+        return ""
+    return text.lower().translate(_punct_trans)
+
+def retrieve_abbreviations(doc: str = default_doc):
     out = []
-    text = doc or ""
+    # normalize once
+    norm_doc = _normalize(doc)
+
     for abbr in _merge_defaults_and_persisted():
         term = abbr["term"]
-        pattern = r"\b{}\b".format(re.escape(term))
-        if re.search(pattern, text, flags=re.IGNORECASE) or term.lower() in text.lower():
+        norm_term = _normalize(term)
+
+        # exact substring check on normalized text
+        if norm_term and norm_term in norm_doc.split():
+            out.append({"term": term, "explanation": abbr["explanation"]})
+        # fallback: looser check if term is multi-word
+        elif norm_term and norm_term in norm_doc:
             out.append({"term": term, "explanation": abbr["explanation"]})
     return out
 
