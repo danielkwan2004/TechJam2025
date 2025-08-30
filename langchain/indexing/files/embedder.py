@@ -43,13 +43,22 @@ def yield_clauses(articles_json):
             if not ctext:
                 continue
 
+            # NEW: pull signals array from clause (if present)
+            raw_signals = clause.get("signals", [])
+            if isinstance(raw_signals, list):
+                signals = [str(s) for s in raw_signals if s is not None]
+            else:
+                # If malformed, coerce to empty list
+                signals = []
+
             meta = {
-                "type": entry_type,                 # <-- lets you filter later if you ever want
-                "article_number": article_number,   # "30" for articles, "R" for recitals
+                "type": entry_type,
+                "article_number": article_number,
                 "recital_number": str(rec_num) if rec_num is not None else None,
                 "article_title": title,
                 "clause_id": cid,
-                "clause_text": ctext,               # keep text in metadata for nice previews
+                "clause_text": ctext,
+                "signals": signals,                 # <-- NEW: include signals array in metadata
                 "source": "articles.json",
                 "embedding_model": None,            # will be filled right before upsert
             }
