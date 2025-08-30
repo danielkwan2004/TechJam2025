@@ -70,7 +70,6 @@ def extract_signals(doc):
             "If multiple regions are relevant, include all applicable laws. "
             "If no region is specified, assume all regions are affected. "
             "When you see an abbreviation in the PRD, look it up exactly in the abbreviations list provided below. "
-            "If an abbreviation in the document cannot be found, return an error, stating what is missing and no signals. "
             "If no signals are found, return error as null.\n"
         ),
         (
