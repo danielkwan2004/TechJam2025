@@ -55,7 +55,7 @@ chain = prompt | structured_llm
 
 if __name__ == "__main__":
     result: ComplianceAnswer = chain.invoke({
-        "feature": "A new chat layout will be tested in the following regions: CA, US, BR, ID. GH will ensure location targeting and ShadowMode will collect usage metrics without user impact.",
+        "feature": "Friend suggestions with underage safeguards",
         "clauses": [{
             "clause_id": "13-63-103(4)",
             "clause_text": "Do not collect or use any personal information from posts, content, messages, text, or usage activities other than what is necessary to comply with and verify compliance with law, including parent or guardian name, birth date, and any other required information."

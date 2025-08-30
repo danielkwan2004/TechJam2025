@@ -20,7 +20,7 @@ from langchain_core.pydantic_v1 import BaseModel, Field
 from langchain_openai import ChatOpenAI
 # from langchain_google_genai import ChatGoogleGenerativeAI  # Optional alternative
 
-from abbreviation_helper import retrieve_all_abbreviations
+from abbreviation_helper import retrieve_all_abbreviations, add_abbreviation_local
 from signal_extractor import extract_signals
 from typing import Literal
 import pandas as pd
@@ -525,11 +525,43 @@ st.title("🧭 Geo-Specific Compliance Pipeline (Pinecone Cloud)")
 st.caption("PRD → Signals (LLM) → Retrieval (Pinecone + local HF embeddings) → Geo Reasoner (LLM)")
 
 with st.sidebar:
-    with st.expander("Show/hide abbreviations"):
-        abbreviations = retrieve_all_abbreviations()
-        st.dataframe(pd.DataFrame(abbreviations).reset_index(drop=True).iloc[:, 1:], hide_index=True)
+    st.subheader("Abbreviations")
+
+    # Form: add/update a term
+    with st.form("add_abbr_form", clear_on_submit=True):
+        c1, c2 = st.columns([1, 2])
+        with c1:
+            new_term = st.text_input("Term", placeholder="e.g., ABC").strip()
+        with c2:
+            new_expl = st.text_input("Explanation", placeholder="What it means…").strip()
+        submitted = st.form_submit_button("Add / Update", use_container_width=True)
+        if submitted:
+            try:
+                rec = add_abbreviation_local(new_term, new_expl)
+                st.success(f"Saved: {rec['term']} — {rec['explanation']}")
+                st.rerun()  # refresh the table below
+            except Exception as e:
+                st.error(f"Could not save: {e}")
+
+    # Current table
+    with st.expander("Show current abbreviations", expanded=False):
+        abbr_rows = retrieve_all_abbreviations()
+        st.dataframe(
+            pd.DataFrame(abbr_rows).sort_values("term").reset_index(drop=True),
+            hide_index=True
+        )
+
+        # Download helper (exports the merged view)
+        st.download_button(
+            label="Download merged abbreviations.json",
+            data=pd.DataFrame(abbr_rows).to_json(orient="records", force_ascii=False, indent=2),
+            file_name="abbreviations.json",
+            mime="application/json",
+            use_container_width=True,
+        )
 
     st.divider()
+
     st.subheader("Pinecone Settings")
     index_name = st.text_input("Pinecone index_name", value="legal-clauses")
     namespace = st.text_input("Pinecone namespace (optional)", value="EU_DSA")
