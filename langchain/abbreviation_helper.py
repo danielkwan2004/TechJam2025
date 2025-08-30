@@ -1,6 +1,7 @@
 import os
 import json
 from typing import List, Dict
+import re
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -91,12 +92,14 @@ def retrieve_all_abbreviations(doc: str = default_doc) -> List[Dict[str, str]]:
 
 def retrieve_abbreviations(doc: str = default_doc) -> List[Dict[str, str]]:
     """Return abbreviations that appear (substring) in the doc."""
-    out: List[Dict[str, str]] = []
+    out = []
+    text = doc or ""
     for abbr in _merge_defaults_and_persisted():
-        if abbr["term"] in doc:
-            out.append({"term": abbr["term"], "explanation": abbr["explanation"]})
+        term = abbr["term"]
+        pattern = r"\b{}\b".format(re.escape(term))
+        if re.search(pattern, text, flags=re.IGNORECASE) or term.lower() in text.lower():
+            out.append({"term": term, "explanation": abbr["explanation"]})
     return out
-
 
 def add_abbreviation_local(term: str, explanation: str) -> Dict[str, str]:
     """

@@ -405,8 +405,8 @@ def load_history_df(path: str) -> pd.DataFrame:
 # -------------------------
 # UI
 # -------------------------
-st.title("🧭 Geo-Specific Compliance Pipeline (Pinecone Cloud)")
-st.caption("PRD → Signals (LLM) → Retrieval (Pinecone + local HF embeddings) → Geo Reasoner (LLM)")
+st.title("🧭 GeoRag")
+st.caption("PRD → Signals (LLM) → Retrieval (Pinecone) → Geo Reasoner (LLM)")
 
 with st.sidebar:
     st.subheader("Abbreviations")
