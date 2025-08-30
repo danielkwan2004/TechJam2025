@@ -48,7 +48,8 @@ GOOGLE_API_KEY=yourKeyHere
 
 Run:
 ```bash
-cd langchain && streamlit run app.py
+cd langchain && docker compose up -d
+streamlit run app.py
 ```
 
 
