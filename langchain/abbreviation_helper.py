@@ -34,5 +34,5 @@ def add_abbreviation(term: str, explanation: str):
     )
 
 if __name__ == '__main__':
-    abbr = retrieve_abbreviations('Notifications will be tailored by age using ASL, allowing us to throttle or suppress push alerts for minors. EchoTrace will log adjustments, and CDS will verify enforcement across rollout waves.')
+    abbr = retrieve_abbreviations('Introduce limits on video uploads from new accounts. IMT will trigger thresholds based on BB patterns. These limitations are partly for platform safety but without direct legal mapping.')
     print(abbr)
