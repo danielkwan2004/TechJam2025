@@ -6,13 +6,10 @@
 from __future__ import annotations
 import json
 import typing as t
-from pathlib import Path
-
 import streamlit as st
 
 # Signal extraction imports
 import json
-from typing import List, Optional
 
 from dotenv import load_dotenv
 from langchain_core.prompts import ChatPromptTemplate
@@ -26,9 +23,7 @@ load_dotenv()
 
 # Retriever imports
 
-
-from typing import List, Dict, Any, Tuple, Optional
-from collections import defaultdict
+from typing import List, Dict, Any, Tuple, Optional, Literal
 
 from langchain_pinecone import PineconeVectorStore
 from langchain_community.embeddings import HuggingFaceEmbeddings
@@ -516,7 +511,7 @@ if run:
     # 3) Retrieve top clauses (Pinecone cloud)
     with st.spinner("Retrieving relevant clauses (Pinecone)…"):
         try:
-            results = retrieve_top10_clauses_pinecone(
+            results = retrieve_top10_clauses(
                 feature_text=feature_text,
                 query_signals=query_signals,
                 index_name=index_name,
