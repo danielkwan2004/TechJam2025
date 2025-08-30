@@ -26,6 +26,13 @@ def retrieve_abbreviations(doc=default_doc):
 
     return out
 
+def add_abbreviation(term: str, explanation: str):
+    response = (
+        supabase.table("abbreviations")
+        .insert({"term": term, "explanation": explanation})
+        .execute()
+    )
+
 if __name__ == '__main__':
     abbr = retrieve_abbreviations('Notifications will be tailored by age using ASL, allowing us to throttle or suppress push alerts for minors. EchoTrace will log adjustments, and CDS will verify enforcement across rollout waves.')
     print(abbr)
