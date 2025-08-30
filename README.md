@@ -2,14 +2,6 @@
 
 \
 \
-\
-\
-\
-\
-\
-\
-\
-
 
 **GeoFlag**
 
@@ -20,7 +12,6 @@
 From Guesswork to Governance: Automating Geo-Regulation with LLM
 
 \
-
 
 **Members:**
 
@@ -46,31 +37,30 @@ GeoRag is a compliance reasoning tool, accessed via Streamlit. It takes product 
 
 1\. Clone repo
 
-|                                                                        |
-| ---------------------------------------------------------------------- |
-| git clone https\://github.com/danielkwan2004/TechJam2025cd TechJam2025 |
+``` git clone https\://github.com/danielkwan2004/TechJam2025cd TechJam2025 ```
 
 2\. Create a virtual environment
 
 We recommend Python 3.13.
 
-|                                                                                                           |
-| --------------------------------------------------------------------------------------------------------- |
-| python3 -m venv .venv source .venv/bin/activate pip install --upgrade pip pip install -r requirements.txt |
+``` python3 -m venv .venv source .venv/bin/activate pip install --upgrade pip pip install -r requirements.txt ```
 
 3\. Configure environment variables and run
 
 Copy `.env.example` → `.env` and set:
 
-|                                                                                                                                                                                                                                                                             |
-| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| OPENAI\_API\_KEY=yourKeyHereLANGCHAIN\_TRACING\_V2=trueLANGSMITH\_PROJECT=techjam2025LANGCHAIN\_ENDPOINT=https\://api.smith.langchain.comLANGSMITH\_API\_KEY=lsv2\_pt\_45904721093f4e49a5cb43627830bbd0\_4dc70d2123GOOGLE\_API\_KEY=AIzaSyAURKGvKYXf-C1Ev1YK3JqNvSmSmQxAQS4 |
+```
+   OPENAI\_API\_KEY=yourKeyHere
+   LANGCHAIN\_TRACING\_V2=true
+   LANGSMITH\_PROJECT=techjam2025
+   LANGCHAIN\_ENDPOINT=https\://api.smith.langchain.com
+   LANGSMITH\_API\_KEY=lsv2\_pt\_45904721093f4e49a5cb43627830bbd0\_4dc70d2123
+   GOOGLE\_API\_KEY=AIzaSyAURKGvKYXf-C1Ev1YK3JqNvSmSmQxAQS4
+```
 
 Run:
 
-|                                      |
-| ------------------------------------ |
-| cd langchain && streamlit run app.py |
+``` cd langchain && streamlit run app.py ```
 
 
 ## Tech Stack
@@ -97,9 +87,9 @@ Run:
 
 GeoRag uses Pinecone for vector search. Laws/clauses are pre-indexed into Pinecone with metadata:
 
-|                                                                                                                                                                                                                                           |
-| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|   {     "type": "...",     "article\_number": "...",     "recital\_number": "...",     "title": "..",     "clauses": \[       {         "clause\_id": "...",         "clause\_text": "....",         "signals": \[...]       }     ]   }, |
+```
+{     "type": "...",     "article\_number": "...",     "recital\_number": "...",     "title": "..",     "clauses": \[       {         "clause\_id": "...",         "clause\_text": "....",         "signals": \[...]       }     ]   },
+```
 
 Pinecone is run locally via docker.
 
@@ -126,16 +116,12 @@ Abbreviations are stored in a Supabase table abbreviations(term, explanation). T
 
 - Example:
 
-|                                                                                                                                                                                           |
-| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| from abbreviation\_helper import retrieve\_abbreviations retrieve\_abbreviations("Upload limits apply for IMT accounts.") # → \[{'term': 'IMT', 'explanation': 'In-Market Testing'}, ...] |
+``` from abbreviation\_helper import retrieve\_abbreviations retrieve\_abbreviations("Upload limits apply for IMT accounts.") # → \[{'term': 'IMT', 'explanation': 'In-Market Testing'}, ...] ```
 
 
 ## You can also add new abbreviation terms. This is handled via Streamlit in frontend:
 
-|                                                                                                       |
-| ----------------------------------------------------------------------------------------------------- |
-| from abbreviation\_helper import add\_abbreviation add\_abbreviation("BB", "Behavioral Benchmarking") |
+``` from abbreviation\_helper import add\_abbreviation add\_abbreviation("BB", "Behavioral Benchmarking") ```
 
 2. ### Law Cards
 
@@ -143,13 +129,7 @@ GeoRag relies on a structured JSON knowledge base called `law_cards.json`. Each 
 
 A law card has the following structure:
 
-|                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| {   "version": "1.1",   "laws": \[     {       "id": "US\_ALL\_2258A",      // Unique identifier       "name": "U.S.Code 2258A - NCMEC reporting requirements of providers",       "region": "US\_all",        // Geographic scope       "category": \[...],       "triggers": {         "keywords": \[...],    // Phrases to match in features/PRDs         "signals": \[...],     // Normalized compliance signal names         "must\_all": \[...],    // Required signal(s) for a valid match         "must\_any": \[                 // At least one must be present           "ncmec\_reference",           "cyphertipline\_reference",           "include\_visual\_depictions",           "include\_complete\_communication"         ],         "negations": \[...]           // False positives to ignore       },       "reason\_templates": \[...]      // Templates for LLM reasoning       ],       "priority": "high",            // Weighting in multi-law reasoning       "last\_updated": "2025-08-26"     }   ] } |
-
-\
-
-
+``` {   "version": "1.1",   "laws": \[     {       "id": "US\_ALL\_2258A",      // Unique identifier       "name": "U.S.Code 2258A - NCMEC reporting requirements of providers",       "region": "US\_all",        // Geographic scope       "category": \[...],       "triggers": {         "keywords": \[...],    // Phrases to match in features/PRDs         "signals": \[...],     // Normalized compliance signal names         "must\_all": \[...],    // Required signal(s) for a valid match         "must\_any": \[                 // At least one must be present           "ncmec\_reference",           "cyphertipline\_reference",           "include\_visual\_depictions",           "include\_complete\_communication"         ],         "negations": \[...]           // False positives to ignore       },       "reason\_templates": \[...]      // Templates for LLM reasoning       ],       "priority": "high",            // Weighting in multi-law reasoning       "last\_updated": "2025-08-26"     }   ] } ```
 
 ## Pipeline
 
@@ -175,8 +155,4 @@ A law card has the following structure:
 
    - The feature and extracted clauses are fed into a reasoner that then outputs a final decision on whether geo-specific compliance logic is required, in the format:
 
-|                                                                                                                                                               |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| {    'geo\_specific\_required': True/False,     'reasoning': '',     'related\_regulations':         \[{'id': '13-63-103(4)', 'title': None, 'snippet': ''}]} |
-
-__
+``` {    'geo\_specific\_required': True/False,     'reasoning': '',     'related\_regulations':         \[{'id': '13-63-103(4)', 'title': None, 'snippet': ''}]} ```
