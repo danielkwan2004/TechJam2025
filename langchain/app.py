@@ -30,7 +30,7 @@ load_dotenv()
 from typing import List, Dict, Any, Tuple, Optional
 from collections import defaultdict
 
-from langchain_community.vectorstores import Chroma
+from langchain_pinecone import PineconeVectorStore
 from langchain_community.embeddings import HuggingFaceEmbeddings
 
 # Reasoner imports
@@ -146,149 +146,118 @@ def extract_signals(doc: str) -> dict:
 # =========================
 
 def _search_with_relevance_scores(
-    vs: Chroma, query: str, k: int, where: dict | None = None
+    vs: PineconeVectorStore, query: str, k: int, where: dict | None = None
 ) -> List[Tuple[Any, float]]:
     """
-    Try to use 'similarity_search_with_relevance_scores' (higher is better).
-    Fallback to 'similarity_search_with_score' (typically distance; lower is better),
-    converting to a pseudo-relevance in (0,1] as 1 / (1 + distance).
+    Use similarity_search_with_score (distance) and convert to pseudo-relevance in (0,1]:
+    rel = 1 / (1 + distance). This works across providers.
     """
-    try:
-        # Newer LC: returns List[(Document, relevance_score in 0..1)]
-        return vs.similarity_search_with_relevance_scores(query, k=k, filter=where)
-    except Exception:
-        # Fallback to distance-based scores. Convert to "relevance".
-        pairs = vs.similarity_search_with_score(query, k=k, filter=where)  # type: ignore[arg-type]
-        conv = []
-        for doc, dist in pairs:
-            try:
-                d = float(dist)
-            except Exception:
-                d = 1.0
-            rel = 1.0 / (1.0 + d)
-            conv.append((doc, rel))
-        return conv
+    pairs = vs.similarity_search_with_score(query, k=k, filter=where)
+    out = []
+    for doc, dist in pairs:
+        try:
+            d = float(dist)
+        except Exception:
+            d = 1.0
+        rel = 1.0 / (1.0 + d)
+        out.append((doc, rel))
+    return out
 
 
 def retrieve_top10_clauses(
-    feature_text: str,
-    query_signals: List[str],
     *,
-    persist_directory: str,
-    collection_name: str,
+    feature_text: str,
+    query_signals: list[str],
+    index_name: str,
+    namespace: str | None,
     hf_model_name: str = "sentence-transformers/all-MiniLM-L6-v2",
-    # Candidate sizes:
-    k_semantic: int = 40,
-    k_per_signal: int = 20,
+    # Candidate sizes (tune as needed):
+    k_semantic: int = 60,
+    k_per_signal: int = 25,
     # Fusion params:
-    rrf_k: int = 60,              # stabilization constant in RRF
+    rrf_k: int = 60,              # RRF stabilization constant
     lambda_signal: float = 1.5,   # weight for signal-driven ranking
-    overlap_bonus: float = 0.3,   # bonus term for proportion of signals matched
+    overlap_bonus: float = 0.3,   # bonus for proportion of query signals matched
     top_k: int = 10,
-) -> List[Dict[str, Any]]:
+) -> list[dict]:
     """
-    Retrieve top-10 clauses by fusing semantic relevance and metadata signal overlap.
+    Retrieve top-10 clauses by fusing semantic relevance and metadata signal overlap against
+    a Pinecone cloud index built with clause metadata (including 'signals' as a list).
 
-    Args:
-        feature_text: Product feature text (title + description + context).
-        query_signals: Signals to prioritize (e.g., ["parental_consent_required", ...]).
-        persist_directory: Chroma persist dir that contains the pre-built collection.
-        collection_name: Chroma collection name.
-        hf_model_name: Local Hugging Face embedding model for the query.
-        k_semantic: How many candidates to pull via pure semantic search.
-        k_per_signal: How many candidates to pull per signal with metadata filter.
-        rrf_k: RRF constant to stabilize reciprocal ranks.
-        lambda_signal: Weight multiplier for the signal-driven ranking term.
-        overlap_bonus: Extra bonus for overlap proportion (0..1) of signals.
-        top_k: Final number of results to return.
-
-    Returns:
-        List of dicts: [{
-            "clause_id": str,
-            "article_number": str,
-            "article_title": str,
-            "type": str,
-            "signals": list[str],
-            "text": str,                # clause_text / page_content
-            "semantic_relevance": float,
-            "signal_overlap": int,
-            "final_score": float,
-        }, ...] (sorted by final_score desc, length <= top_k)
+    IMPORTANT: When you built the index, your metadata stored the clause text under "clause_text".
+               We pass text_key="clause_text" so LangChain puts that in Document.page_content.
     """
-    # 1) Build vectorstore with LOCAL HF embeddings for the query
+    # 1) Build vector store from existing Pinecone index using local HF embeddings
     embedder = HuggingFaceEmbeddings(model_name=hf_model_name)
-    vs = Chroma(
-        collection_name=collection_name,
-        persist_directory=persist_directory,
-        embedding_function=embedder,
+    vs = PineconeVectorStore.from_existing_index(
+        index_name=index_name,
+        embedding=embedder,
+        namespace=namespace,
+        text_key="clause_text",  # <-- crucial: matches your upsert metadata key
     )
 
     # 2) Global semantic candidates (no filter)
     sem_pairs = _search_with_relevance_scores(vs, feature_text, k=k_semantic)
-    # sem_rank: lower rank number = better; store best rank and relevance
-    sem_rank: Dict[str, int] = {}
-    sem_rel: Dict[str, float] = {}
-    candidates: Dict[str, Any] = {}
 
-    def _doc_uid(d) -> str:
-        m = d.metadata or {}
+    def _uid(doc) -> str:
+        m = doc.metadata or {}
         return f"{m.get('article_number','')}__{m.get('clause_id','')}"
 
-    for idx, (doc, rel) in enumerate(sem_pairs):
-        uid = _doc_uid(doc)
+    sem_rank: dict[str, int] = {}
+    sem_rel: dict[str, float] = {}
+    candidates: dict[str, t.Any] = {}
+    for i, (doc, rel) in enumerate(sem_pairs):
+        uid = _uid(doc)
         candidates[uid] = doc
-        sem_rank[uid] = idx  # 0-based rank
+        sem_rank[uid] = i
         sem_rel[uid] = float(rel)
 
-    # 3) Signal-filtered candidates (metadata where signals contains X)
-    # For each signal we fetch a slice and keep the best rank across signals.
-    sig_rank: Dict[str, int] = defaultdict(lambda: 10_000_000)  # large default
-    overlap_counts: Dict[str, int] = defaultdict(int)
+    # 3) Signal-filtered candidates (using Pinecone's metadata filter $contains on lists)
+    sig_rank: dict[str, int] = {}
+    overlap_counts: dict[str, int] = {}
+    BIG = 10_000_000
+    # default big rank for any candidate missing from a list
+    for uid in list(candidates.keys()):
+        sig_rank[uid] = BIG
+        overlap_counts[uid] = 0
 
     if query_signals:
         for signal in query_signals:
             where = {"signals": {"$contains": signal}}
             sig_pairs = _search_with_relevance_scores(vs, feature_text, k=k_per_signal, where=where)
             for idx, (doc, _rel) in enumerate(sig_pairs):
-                uid = _doc_uid(doc)
+                uid = _uid(doc)
                 candidates[uid] = doc
-                # best (lowest) rank across signals
-                if idx < sig_rank[uid]:
+                # best signal rank seen
+                prev = sig_rank.get(uid, BIG)
+                if idx < prev:
                     sig_rank[uid] = idx
-                # count how many query signals this doc claims
-                doc_signals = doc.metadata.get("signals", []) or []
-                if isinstance(doc_signals, list) and signal in doc_signals:
-                    overlap_counts[uid] += 1
+                # count overlap
+                doc_sigs = doc.metadata.get("signals", []) or []
+                if isinstance(doc_sigs, list) and signal in doc_sigs:
+                    overlap_counts[uid] = overlap_counts.get(uid, 0) + 1
 
-    # Ensure any doc in candidates at least has a default rank and overlap
-    for uid in list(candidates.keys()):
-        if uid not in sem_rank:
-            sem_rank[uid] = 10_000_000  # not in semantic list
-            sem_rel[uid] = 0.0
-        if uid not in overlap_counts:
-            overlap_counts[uid] = 0
-
-    # 4) Fuse rankings with RRF + bonus for signal overlap proportion
-    # RRF score: sum(1/(k + rank_i)). Here we have:
-    #   - semantic: rank_sem
-    #   - signal-driven: rank_sig  (weighted by lambda_signal)
-    # Then add a small overlap bonus proportional to fraction of matched signals.
-    fused: List[Tuple[str, float]] = []
+    # Ensure coverage defaults
     for uid in candidates.keys():
-        r_sem = sem_rank[uid]
-        r_sig = sig_rank[uid]
-        rr_sem = 1.0 / (rrf_k + r_sem)
-        rr_sig = 1.0 / (rrf_k + r_sig)
-        overlap = overlap_counts[uid]
-        frac = (overlap / max(len(query_signals), 1)) if query_signals else 0.0
+        sem_rank.setdefault(uid, BIG)
+        sem_rel.setdefault(uid, 0.0)
+        sig_rank.setdefault(uid, BIG)
+        overlap_counts.setdefault(uid, 0)
+
+    # 4) Reciprocal Rank Fusion + overlap bonus
+    fused = []
+    for uid in candidates.keys():
+        rr_sem = 1.0 / (rrf_k + sem_rank[uid])
+        rr_sig = 1.0 / (rrf_k + sig_rank[uid])
+        frac = (overlap_counts[uid] / max(len(query_signals), 1)) if query_signals else 0.0
         final = rr_sem + (lambda_signal * rr_sig) + (overlap_bonus * frac)
         fused.append((uid, final))
 
     fused.sort(key=lambda x: x[1], reverse=True)
     top = fused[:top_k]
 
-    # 5) Build output payload with helpful fields
-    results: List[Dict[str, Any]] = []
+    # 5) Build output payload
+    results: list[dict] = []
     for uid, final_score in top:
         doc = candidates[uid]
         m = doc.metadata or {}
@@ -298,7 +267,7 @@ def retrieve_top10_clauses(
             "article_title": m.get("article_title"),
             "type": m.get("type"),
             "signals": m.get("signals", []),
-            "text": doc.page_content,
+            "text": doc.page_content,  # thanks to text_key="clause_text"
             "semantic_relevance": sem_rel.get(uid, 0.0),
             "signal_overlap": overlap_counts.get(uid, 0),
             "final_score": float(final_score),
@@ -472,24 +441,29 @@ def build_feature_text(name: str, title: str, description: str, signals: t.List[
     return f"{name or title}\n\n{description.strip()}\n\n{sig_line}{reason_block}"
 
 
-# =========================
+# -------------------------
 # UI
-# =========================
-
-st.title("🧭 Geo-Specific Compliance Pipeline")
-st.caption("PRD → Signals (LLM) → Retrieval (Chroma + HF) → Geo Reasoner (LLM)")
+# -------------------------
+st.title("🧭 Geo-Specific Compliance Pipeline (Pinecone Cloud)")
+st.caption("PRD → Signals (LLM) → Retrieval (Pinecone + local HF embeddings) → Geo Reasoner (LLM)")
 
 with st.sidebar:
+    st.subheader("Pinecone Settings")
+    index_name = st.text_input("Pinecone index_name", value="legal-clauses")
+    namespace = st.text_input("Pinecone namespace (optional)", value="eu_dsa")
+    st.caption("Make sure your index stores clause text under metadata key 'clause_text'.")
+    st.markdown("---")
+
     st.subheader("Retriever Settings")
-    persist_directory = st.text_input("Chroma persist_directory", value="./chroma_store")
-    collection_name = st.text_input("Chroma collection_name", value="clauses")
     hf_model_name = st.text_input("HF Embedding Model", value="sentence-transformers/all-MiniLM-L6-v2")
     k_semantic = st.slider("Semantic candidate pool (k_semantic)", 20, 200, 60, 5)
     k_per_signal = st.slider("Per-signal pool (k_per_signal)", 10, 100, 25, 5)
     min_confidence = st.slider("Min signal confidence", 0.0, 1.0, 0.55, 0.05)
+    lambda_signal = st.slider("Signal rank weight (λ)", 0.5, 3.0, 1.5, 0.1)
+    overlap_bonus = st.slider("Overlap bonus", 0.0, 1.0, 0.3, 0.05)
     top_k = st.slider("Top-K final results", 5, 20, 10, 1)
     st.markdown("---")
-    st.info("Make sure your Chroma store is built with clause metadata including `signals`.", icon="ℹ️")
+    st.info("Set PINECONE_API_KEY in your environment.", icon="ℹ️")
 
 colA, colB = st.columns(2)
 with colA:
@@ -504,6 +478,7 @@ with colB:
 
 run = st.button("Run Full Pipeline", type="primary", use_container_width=True)
 
+
 # -------------------------
 # Pipeline Run
 # -------------------------
@@ -513,6 +488,7 @@ if run:
         st.stop()
 
     prd_text = feature_description or ""
+
     # 1) Extract signals (LLM)
     with st.spinner("Extracting signals from PRD…"):
         llm_output = extract_signals(prd_text)
@@ -537,17 +513,20 @@ if run:
         llm_output=llm_output
     )
 
-    # 3) Retrieve top clauses
-    with st.spinner("Retrieving relevant clauses…"):
+    # 3) Retrieve top clauses (Pinecone cloud)
+    with st.spinner("Retrieving relevant clauses (Pinecone)…"):
         try:
-            results = retrieve_top10_clauses(
+            results = retrieve_top10_clauses_pinecone(
                 feature_text=feature_text,
                 query_signals=query_signals,
-                persist_directory=persist_directory,
-                collection_name=collection_name,
+                index_name=index_name,
+                namespace=namespace or None,
                 hf_model_name=hf_model_name,
                 k_semantic=k_semantic,
                 k_per_signal=k_per_signal,
+                rrf_k=60,
+                lambda_signal=lambda_signal,
+                overlap_bonus=overlap_bonus,
                 top_k=top_k
             )
         except Exception as e:
