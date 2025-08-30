@@ -376,6 +376,7 @@ with st.sidebar:
 colA, colB = st.columns(2)
 with colA:
     feature_name = st.text_input("Feature Name", placeholder="e.g., Minor Accounts Privacy Defaults")
+    feature_title = feature_name
 with colB:
     feature_description = st.text_area(
         "Feature Description (PRD excerpt)",
@@ -402,8 +403,9 @@ if run:
     st.subheader("🔎 LLM Signal Extraction")
     st.json(llm_output, expanded=False)
 
-    if llm_output.get("error"):
-        st.error(f"Extractor reported an error: {llm_output['error']}")
+    error_val = llm_output.get("error")
+    if error_val and error_val.lower() != "null":
+        st.error(f"Extractor reported an error: {error_val}")
         st.stop()
 
     # 2) Prepare signals + query text
