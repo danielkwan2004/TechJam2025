@@ -1,8 +1,5 @@
 # Sample usage: python search.py --query "what laws relate to child safety" --index legal-clauses --namespace eu_dsa --model sentence-transformers/all-mpnet-base-v2 --retrieval_k 50 --top_k 10
 
-
-
-
 import os
 import argparse
 from dotenv import load_dotenv
