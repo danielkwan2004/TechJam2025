@@ -1,18 +1,18 @@
 import os
-from dotenv import load_dotenv
-from supabase import create_client, Client
+import json
+from typing import List, Dict
+import re
+import string
 
+from dotenv import load_dotenv
 load_dotenv()
 
-url: str = os.environ.get("SUPABASE_URL")
-key: str = os.environ.get("SUPABASE_KEY")
-supabase: Client = create_client(url, key)
-# Helper function that takes in a query, then outputs a list of abbreviations used.
-# Duplicates will be added.
-
+# -------------------------
+# Defaults
+# -------------------------
 default_doc = "Hello World."
 
-abbreviations = [
+DEFAULT_ABBREVIATIONS: List[Dict[str, str]] = [
     {"term": "NR", "explanation": "Not recommended"},
     {"term": "PF", "explanation": "Personalized feed"},
     {"term": "GH", "explanation": "Geo-handler; a module responsible for routing features based on user region"},
@@ -36,30 +36,107 @@ abbreviations = [
     {"term": "IMT", "explanation": "Internal monitoring trigger"},
 ]
 
+# -------------------------
+# Local persistence
+# -------------------------
+DATA_DIR = os.getenv("DATA_DIR", "data")
+ABBR_PATH = os.path.join(DATA_DIR, "abbreviations.json")
 
-def retrieve_all_abbreviations(doc=default_doc):
-    return abbreviations
+
+def _ensure_data_dir() -> None:
+    os.makedirs(DATA_DIR, exist_ok=True)
 
 
-def retrieve_abbreviations(doc=default_doc):
+def _load_persisted() -> List[Dict[str, str]]:
+    """Load locally saved abbreviations; returns [] if none."""
+    try:
+        if os.path.exists(ABBR_PATH):
+            with open(ABBR_PATH, "r", encoding="utf-8") as f:
+                data = json.load(f) or []
+            # filter/normalize
+            out = []
+            for row in data:
+                term = (row.get("term") or "").strip()
+                expl = (row.get("explanation") or "").strip()
+                if term and expl:
+                    out.append({"term": term, "explanation": expl})
+            return out
+    except Exception:
+        pass
+    return []
+
+
+def _save_persisted(rows: List[Dict[str, str]]) -> None:
+    _ensure_data_dir()
+    with open(ABBR_PATH, "w", encoding="utf-8") as f:
+        json.dump(rows, f, indent=2, ensure_ascii=False)
+
+
+def _merge_defaults_and_persisted() -> List[Dict[str, str]]:
+    """
+    Merge defaults with persisted items.
+    If a term exists in both, the persisted explanation wins.
+    """
+    merged: Dict[str, str] = {row["term"]: row["explanation"] for row in DEFAULT_ABBREVIATIONS}
+    for row in _load_persisted():
+        merged[row["term"]] = row["explanation"]  # override default
+    return [{"term": k, "explanation": v} for k, v in merged.items()]
+
+
+# -------------------------
+# Public helpers (used by app)
+# -------------------------
+def retrieve_all_abbreviations(doc: str = default_doc) -> List[Dict[str, str]]:
+    """Return merged (defaults + persisted)."""
+    return _merge_defaults_and_persisted()
+
+_punct_trans = str.maketrans({p: " " for p in string.punctuation})
+
+def _normalize(text: str) -> str:
+    """Lowercase and strip punctuation."""
+    if not text:
+        return ""
+    return text.lower().translate(_punct_trans)
+
+def retrieve_abbreviations(doc: str = default_doc):
     out = []
+    # normalize once
+    norm_doc = _normalize(doc)
 
-    for abbreviation in abbreviations:
-        if abbreviation['term'] in doc:
-            out.append({k: v for k, v in abbreviation.items() if k != "id"})
+    for abbr in _merge_defaults_and_persisted():
+        term = abbr["term"]
+        norm_term = _normalize(term)
 
+        # exact substring check on normalized text
+        if norm_term and norm_term in norm_doc.split():
+            out.append({"term": term, "explanation": abbr["explanation"]})
+        # fallback: looser check if term is multi-word
+        elif norm_term and norm_term in norm_doc:
+            out.append({"term": term, "explanation": abbr["explanation"]})
     return out
 
+def add_abbreviation_local(term: str, explanation: str) -> Dict[str, str]:
+    """
+    Add/update an abbreviation locally in data/abbreviations.json.
+    If term exists, we update its explanation.
+    Returns the record we wrote.
+    """
+    term = (term or "").strip()
+    explanation = (explanation or "").strip()
+    if not term or not explanation:
+        raise ValueError("Both 'term' and 'explanation' are required.")
 
-def add_abbreviation(term: str, explanation: str):
-    response = (
-        supabase.table("abbreviations")
-        .insert({"term": term, "explanation": explanation})
-        .execute()
-    )
+    rows = _load_persisted()
+    # update if exists
+    found = False
+    for row in rows:
+        if row["term"] == term:
+            row["explanation"] = explanation
+            found = True
+            break
+    if not found:
+        rows.append({"term": term, "explanation": explanation})
 
+    _save_persisted(rows)
+    return {"term": term, "explanation": explanation}
 
-if __name__ == '__main__':
-    abbr = retrieve_abbreviations(
-        'Enable users to reshare stories from others, with auto-expiry after 48 hours. This feature logs resharing attempts with EchoTrace and stores activity under BB.')
-    print(abbr)
