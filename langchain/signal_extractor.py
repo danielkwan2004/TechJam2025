@@ -11,7 +11,6 @@ from abbreviation_helper import retrieve_abbreviations
 
 load_dotenv()
 
-
 def extract_hints():
     out = []
 
