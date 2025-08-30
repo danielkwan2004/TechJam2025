@@ -8,10 +8,12 @@ TikTok TechJam 2025 Hackathon
 
 ### Tools Used
 
-- **LLM Application Framework:** [LangChain](https://www.langchain.com/) and [LangSmith](https://www.langchain.com/langsmith)
-- **Embedding Model:** [sentence-transformers/all-mpnet-base-v2](https://huggingface.co/sentence-transformers/all-mpnet-base-v2)
+- **LLM Application Framework:** [LangChain](https://www.langchain.com/)
+  and [LangSmith](https://www.langchain.com/langsmith)
+- **Embedding Model:
+  ** [sentence-transformers/all-mpnet-base-v2](https://huggingface.co/sentence-transformers/all-mpnet-base-v2)
 - **UI Framework:** [Streamlit](https://streamlit.io/)
-- **Databases:** [Supabase](https://supabase.com/) and [Pinecone](https://www.pinecone.io/)
+- **Databases:** [Pinecone](https://www.pinecone.io/)
 
 ### APIs Used
 
