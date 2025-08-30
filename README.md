@@ -11,7 +11,7 @@ TikTok TechJam 2025 Hackathon
 - **LLM Application Framework:** [LangChain](https://www.langchain.com/) and [LangSmith](https://www.langchain.com/langsmith)
 - **Embedding Model:** [sentence-transformers/all-mpnet-base-v2](https://huggingface.co/sentence-transformers/all-mpnet-base-v2)
 - **UI Framework:** [Streamlit](https://streamlit.io/)
-- **Databases:** [Supabase](https://supabase.com/) and [Pinecone](https://www.pinecone.io/)
+- **Databases:** [Pinecone](https://www.pinecone.io/)
 
 ### APIs Used
 
@@ -19,4 +19,10 @@ TikTok TechJam 2025 Hackathon
 
 ### How to Use
 
-1. Setup virtual environment:
+1. Open a new Terminal at the root folder.
+2. Setup virtual environment: py -3 -m venv .venv
+3. Activate it: .\.venv\Scripts\Activate.ps1
+4. Install dependencies: pip install -r requirements.txt
+
+5. Run "cd langchain; docker compose up -d;", this launches the local Pinecone vector DB
+6. Run the Streamlit app locally with "streamlit run app.py"
