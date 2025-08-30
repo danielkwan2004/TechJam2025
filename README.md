@@ -1,8 +1,11 @@
+
 # TikTok TechJam 2025 – GeoFlag
 Feature → Laws Compliance Reasoning Pipeline
 
+
 ## Problem
 From Guesswork to Governance: Automating Geo-Regulation with LLM
+
 
 ## Members
 1. Daniel Kwan  
@@ -13,6 +16,7 @@ From Guesswork to Governance: Automating Geo-Regulation with LLM
 ## Overview
 GeoRag is a compliance reasoning tool, accessed via Streamlit.  
 It takes product artifacts such as PRDs as input, analyzes them for potential compliance signals, retrieves relevant legal clauses from a Pinecone vector index, and runs a geo-specific compliance reasoner to determine whether implementation needs to vary across jurisdictions.
+
 
 ## Installation
 
@@ -35,19 +39,18 @@ pip install -r requirements.txt
 Copy `.env.example` → `.env` and set:
 ```bash
 OPENAI_API_KEY=yourKeyHere
-
 LANGCHAIN_TRACING_V2=true
 LANGSMITH_PROJECT=techjam2025
 LANGCHAIN_ENDPOINT=https://api.smith.langchain.com
 LANGSMITH_API_KEY=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
-
-GOOGLE_API_KEY=AIzaSyAURKGvKYXf-C1Ev1YK3JqNvSmSmQxAQS4
+GOOGLE_API_KEY=yourKeyHere
 ```
 
 Run:
 ```bash
 cd langchain && streamlit run app.py
 ```
+
 
 ## Tech Stack
 
@@ -56,6 +59,7 @@ cd langchain && streamlit run app.py
 - Embedding Model: sentence-transformers/all-mpnet-base-v2  
 - UI Framework: Streamlit  
 - Databases: Pinecone  
+
 
 ### APIs Used
 - OpenAI
@@ -182,3 +186,4 @@ Example Structure:
   ]
 }
 ```
+

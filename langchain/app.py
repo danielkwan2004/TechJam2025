@@ -27,6 +27,9 @@ from typing import Literal
 import pandas as pd
 from collections import defaultdict
 from typing import List, Dict, Any, Tuple, Optional, Literal
+import sys
+import subprocess
+from pathlib import Path
 
 from dotenv import load_dotenv
 import streamlit as st
@@ -85,6 +88,129 @@ def _query_ns(
     )
     return res.get("matches", []) or []
 
+# ⬇️ NEW: use the local gRPC client
+from pinecone.grpc import PineconeGRPC, GRPCClientConfig
+
+# ---------- Config you already had ----------
+EMBEDDER_PATH = Path(__file__).parent / "indexing" / "files" / "local_embedder.py"
+EMBED_ROOT_DIR = Path(__file__).parent / "indexing" / "files"
+EMBED_INDEX_NAME = "legal-clauses"
+EMBED_HOST = "http://localhost:5080"   # Pinecone Local gRPC host
+EMBED_MODEL = "sentence-transformers/all-mpnet-base-v2"
+
+
+# ---------- Helpers UPDATED for Pinecone Local (gRPC) ----------
+
+def _get_local_index(
+    index_name: str,
+    host: str = EMBED_HOST,
+    secure: bool = False,
+):
+    """
+    Returns a Pinecone Local gRPC Index handle.
+    - No real API key needed; default to 'pclocal'.
+    - `secure=False` for pinecone-local (no TLS).
+    """
+    pc = PineconeGRPC(api_key=os.getenv("PINECONE_API_KEY", "pclocal"), host=host)
+    # Will raise if index doesn't exist
+    desc = pc.describe_index(name=index_name)
+    index_host = desc.host
+    index = pc.Index(host=index_host, grpc_config=GRPCClientConfig(secure=secure))
+    return index
+
+
+def _list_all_namespaces(
+    index_name: str,
+    host: str = EMBED_HOST,
+    secure: bool = False,
+) -> List[str]:
+    """List namespaces from describe_index_stats() for local Pinecone."""
+    index = _get_local_index(index_name, host=host, secure=secure)
+    stats = index.describe_index_stats() or {}
+    # handle dict or object responses
+    ns_map = {}
+    if isinstance(stats, dict):
+        ns_map = stats.get("namespaces") or {}
+    else:
+        ns_map = getattr(stats, "namespaces", {}) or {}
+    namespaces = list(ns_map.keys())
+    if "" not in namespaces:
+        namespaces.append("")  # also probe default namespace
+    return namespaces
+
+
+def _query_ns(
+    index,
+    *,
+    vector: List[float],
+    namespace: Optional[str],
+    top_k: int,
+    flt: Optional[dict] = None,
+) -> List[dict]:
+    """Query a single namespace on Pinecone Local and return matches with metadata."""
+    res = index.query(
+        vector=vector,
+        top_k=int(top_k),
+        namespace=(namespace or None),
+        filter=flt,
+        include_metadata=True,
+        include_values=False,
+    )
+    if isinstance(res, dict):
+        return res.get("matches", []) or []
+    return getattr(res, "matches", []) or []
+
+
+# ---------- Bootstrap unchanged ----------
+@st.cache_resource(show_spinner=False)
+def run_embedder_once(
+    embedder_path: Path = EMBEDDER_PATH,
+    root_dir: str = EMBED_ROOT_DIR,
+    index_name: str = EMBED_INDEX_NAME,
+    host: str = EMBED_HOST,
+    model_name: str = EMBED_MODEL,
+) -> dict:
+    if not embedder_path.exists():
+        raise FileNotFoundError(f"embedder not found: {embedder_path}")
+
+    cmd = [
+        sys.executable,
+        str(embedder_path),
+        "--root_dir", root_dir,
+        "--index", index_name,
+        "--host", host,
+        "--model", model_name,
+    ]
+    proc = subprocess.run(cmd, capture_output=True, text=True, check=False)
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"Embedder failed (exit={proc.returncode}).\n"
+            f"STDOUT:\n{proc.stdout}\n\nSTDERR:\n{proc.stderr}"
+        )
+    return {"ok": True, "stdout": proc.stdout, "stderr": proc.stderr}
+
+
+def clear_bootstrap_cache():
+    run_embedder_once.clear()
+
+
+# ---- Bootstrap the local Pinecone index on server start ----
+with st.status("Bootstrapping local index (one-time)…", expanded=False) as s:
+    try:
+        boot = run_embedder_once()
+        s.update(label="Index ready ✅", state="complete")
+        with st.expander("Embedder logs (stdout/stderr)"):
+            st.code(boot.get("stdout", "").strip() or "(no stdout)")
+            st.code(boot.get("stderr", "").strip() or "(no stderr)")
+        st.session_state["bootstrap_ok"] = True
+    except Exception as e:
+        s.update(label="Index bootstrap failed ❌", state="error")
+        st.error(str(e))
+        st.session_state["bootstrap_ok"] = False
+        st.stop()
+
+
+# ---------- Retriever UPDATED to use local Pinecone (gRPC) ----------
 
 def retrieve_top_k_all_namespaces_with_signals_direct(
     *,
@@ -93,6 +219,8 @@ def retrieve_top_k_all_namespaces_with_signals_direct(
     index_name: str,
     namespaces: Optional[List[str]] = None,   # if None, auto-discover
     hf_model_name: str = "sentence-transformers/all-mpnet-base-v2",
+    host: str = EMBED_HOST,          # ⬅️ NEW: local pinecone host
+    grpc_secure: bool = False,       # ⬅️ NEW: TLS off for pinecone-local
     # Candidate sizes:
     k_semantic: int = 60,
     k_per_signal: int = 25,
@@ -101,37 +229,33 @@ def retrieve_top_k_all_namespaces_with_signals_direct(
     lambda_signal: float = 1.5,
     overlap_bonus: float = 0.3,
     # Efficiency limits:
-    per_namespace_cap: int = 25,   # cap how many fused candidates we keep per ns before global sort
+    per_namespace_cap: int = 25,
     top_k: int = 10,
     verbose: bool = True,
 ) -> List[Dict[str, Any]]:
     """
-    Direct-Pinecone retriever:
-      - Encodes the query locally with SentenceTransformers (normalized, for cosine).
-      - For each namespace, runs:
+    Local-Pinecone (gRPC) retriever:
+      - Encodes the query with SentenceTransformers (normalized).
+      - For each namespace:
           1) semantic query (no filter)
-          2) per-signal queries (metadata filter {"signals": {"$in": [SIG]}})
-      - Fuses via Reciprocal Rank Fusion + overlap bonus.
-      - Caps per-namespace results, then returns global top_k across all namespaces.
+          2) per-signal queries (filter {"signals": {"$in": [SIG]}})
+      - Fuses via RRF + overlap bonus.
     """
     if verbose:
+        print(f"[DEBUG] Using Pinecone Local at: {host}")
         print(f"[DEBUG] Index name: {index_name}")
 
-    api_key = os.environ.get("PINECONE_API_KEY")
-    if not api_key:
-        raise RuntimeError("PINECONE_API_KEY not set in environment.")
+    # ⬇️ local index handle (no cloud client)
+    index = _get_local_index(index_name, host=host, secure=grpc_secure)
 
-    pc = Pinecone(api_key=api_key)
-    index = pc.Index(index_name)
-
-    # Build query vector (normalized=True to match your embedder)
+    # Build query vector
     model = SentenceTransformer(hf_model_name)
     query_vec = model.encode([feature_text], normalize_embeddings=True)[0].tolist()
 
     # Determine namespaces
     if namespaces is None:
         try:
-            namespaces = _list_all_namespaces(index_name)
+            namespaces = _list_all_namespaces(index_name, host=host, secure=grpc_secure)
         except Exception as e:
             if verbose:
                 print(f"[DEBUG] Could not list namespaces automatically: {e}")
@@ -154,7 +278,6 @@ def retrieve_top_k_all_namespaces_with_signals_direct(
         # 2) Per-signal filtered candidates
         per_signal_lists: List[List[dict]] = []
         for sig in (query_signals or []):
-            # IMPORTANT: use $in to test membership in a list-valued field
             flt = {"signals": {"$in": [sig]}}
             sig_matches = _query_ns(index, vector=query_vec, namespace=ns, top_k=k_per_signal, flt=flt)
             per_signal_lists.append(sig_matches)
@@ -165,7 +288,8 @@ def retrieve_top_k_all_namespaces_with_signals_direct(
         BIG = 10_000_000
         candidates: Dict[str, dict] = {}
         sem_rank: Dict[str, int] = {}
-        sem_sim: Dict[str, float] = {}  # cosine similarity from Pinecone 'score'
+        sem_sim: Dict[str, float] = {}
+
         for i, m in enumerate(sem_matches):
             uid = f"{ns}::{m.get('id')}"
             candidates[uid] = m
@@ -230,7 +354,7 @@ def retrieve_top_k_all_namespaces_with_signals_direct(
             "article_title": md.get("article_title"),
             "type": md.get("type"),
             "signals": md.get("signals", []),
-            "text": md.get("clause_text", ""),
+            "text": md.get("clause_text", md.get("text", "")),
             "semantic_relevance": float(sem_similarity),
             "signal_overlap": int(overlap),
             "final_score": float(score),
@@ -472,7 +596,14 @@ with colB:
         height=140
     )
 
-run = st.button("Run Full Pipeline", type="primary", use_container_width=True)
+# If we got here, run_embedder_once already succeeded — but this guards against any future refactor
+bootstrap_ok = st.session_state.get("bootstrap_ok", False)
+run = st.button(
+    "Run Full Pipeline",
+    type="primary",
+    use_container_width=True,
+    disabled=not bootstrap_ok
+)
 
 # -------------------------
 # Pipeline Run
